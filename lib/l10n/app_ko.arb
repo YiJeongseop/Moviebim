@@ -1,5 +1,6 @@
 {
   "@@locale": "ko",
 
-  "login" : "로그인"
+  "enterATitle" : "제목을 입력해주세요.",
+  "errorMessage" : "잠시 후에 다시 시도해 주세요."
 }

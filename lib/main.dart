@@ -2,38 +2,40 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:moviebim/screens/home_screen.dart';
+import '../screens/add_screen.dart';
+import '../screens/home_screen.dart';
 
 late final SharedPreferences _prefs;
-late String defaultLocale;
+final String defaultLocale = Platform.localeName;
+bool englishTest = false;
 
 ThemeData _lightTheme = ThemeData(
+  brightness: Brightness.light,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     elevation: 0.0,
   ),
   primaryColor: Colors.white,
   primaryColorDark: Colors.black,
-  brightness: Brightness.light,
 );
 
 ThemeData _darkTheme = ThemeData(
+  brightness: Brightness.dark,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.black,
     elevation: 0.0,
   ),
   primaryColor: Colors.black,
   primaryColorDark: Colors.white,
-  brightness: Brightness.dark,
 );
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _prefs = await SharedPreferences.getInstance();
-  defaultLocale = Platform.localeName;
   runApp(MyApp());
 }
 
@@ -61,13 +63,27 @@ class MyApp extends StatelessWidget {
         Locale('en'),
         Locale('ko'),
       ],
-      locale: (defaultLocale == 'ko_KR') ? const Locale('ko') : const Locale('en'),
+      locale: englishTest
+          ? const Locale('en')
+          : ((defaultLocale == 'ko_KR') ? const Locale('ko') : const Locale('en')),
       title: (defaultLocale == 'ko_KR') ? '무비빔' : 'Moviebim',
-      theme: _lightTheme,
-      darkTheme: _darkTheme,
+      theme: _lightTheme.copyWith(
+        textTheme: englishTest
+            ? GoogleFonts.robotoTextTheme()
+            : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
+      ),
+      darkTheme: _darkTheme.copyWith(
+        textTheme: englishTest
+            ? GoogleFonts.robotoTextTheme()
+            : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
+      ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => const HomeScreen(), transition: Transition.noTransition),
+        GetPage(name: '/add', page: () => AddScreen(), transition: Transition.noTransition),
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
 
-  "login" : "Login"
+  "enterATitle" : "Enter a title.",
+  "errorMessage" : "Please try again later."
 }
