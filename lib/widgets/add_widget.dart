@@ -77,7 +77,7 @@ class AddWidget extends StatelessWidget {
             onChanged: (value) => textController.updateComment(value),
             textInputAction: TextInputAction.go,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.1,)
+          SizedBox(height: MediaQuery.of(context).size.height * 0.1),
         ],
       ),
     );

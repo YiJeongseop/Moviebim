@@ -111,7 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dayController.savedMovies[listIndex][dateStr][index].title,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.04),
-                                  ),),
+                                  ),
+                                ),
                                 const SizedBox(height: 10),
                                 SizedBox(
                                   width: (deviceWidth / 3) * 1.55,
@@ -119,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dayController.savedMovies[listIndex][dateStr][index].comment,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.035),
-                                  ),)
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: InkWell(
                               child: Icon(Icons.edit, color: Get.isDarkMode ? Colors.white70 : Colors.black54),
                               onTap: () {
-                                // Todo: edit movie info
+                                Get.toNamed('/edit', arguments: [dayController, listIndex, dateStr, index]);
                               },
                             ),
                           ),
