@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     dayController.savedMovies[listIndex][dateStr][index].title,
                                     softWrap: true,
-                                    style: TextStyle(fontSize: deviceWidth * 0.04),
+                                    style: TextStyle(fontSize: deviceWidth * 0.04, color: Theme.of(context).primaryColorDark),
                                   ),
                                 ),
                                 const SizedBox(height: 10),
@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     dayController.savedMovies[listIndex][dateStr][index].comment,
                                     softWrap: true,
-                                    style: TextStyle(fontSize: deviceWidth * 0.035),
+                                    style: TextStyle(fontSize: deviceWidth * 0.035, color: Theme.of(context).primaryColorDark),
                                   ),
                                 ),
                               ],

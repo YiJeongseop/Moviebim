@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 import '../controllers/pages_controller.dart';
@@ -56,6 +57,16 @@ class SearchWidget extends StatelessWidget {
                             duration: const Duration(seconds: 5),
                           ),
                         );
+                      } else {
+                        for(int i = 0; i < movieController.movies.length; i++){
+                          final response = await http.get(Uri.parse('https://image.tmdb.org/t/p/w500${movieController.movies[i]['poster_path']}'));
+                          if(response.statusCode == 200){
+                            continue;
+                          } else {
+                            movieController.movies.removeAt(i);
+                            i--;
+                          }
+                        }
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -145,4 +156,13 @@ class SearchWidget extends StatelessWidget {
       ],
     );
   }
+  //
+  // Future<bool> checkPoster(dynamic movie) async {
+  //   final response = await http.get(Uri.parse('https://image.tmdb.org/t/p/w500${movie['poster_path']}'));
+  //   if (response.statusCode == 200) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }
