@@ -3,26 +3,17 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
+import '../controllers/pages_controller.dart';
 import '../services/tmdb_service.dart';
 
-class SearchWidget extends StatefulWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+class SearchWidget extends StatelessWidget {
+  SearchWidget({Key? key, required this.movieController, required this.textController, required this.pagesController, required this.textFocus}) : super(key: key);
 
-  @override
-  State<SearchWidget> createState() => _SearchWidgetState();
-}
-
-class _SearchWidgetState extends State<SearchWidget> {
   final TmdbService _tmdbService = TmdbService();
-  final TextController textController = Get.put(TextController());
-  final MovieController movieController = Get.put(MovieController());
-
-  @override
-  void dispose() {
-    textController.dispose();
-    movieController.dispose();
-    super.dispose();
-  }
+  final MovieController movieController;
+  final TextController textController;
+  final PagesController pagesController;
+  final FocusNode textFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +32,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             children: [
               Expanded(
                 child: TextField(
+                  focusNode: textFocus,
                   textAlign: TextAlign.start,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.enterATitle,
@@ -57,6 +49,14 @@ class _SearchWidgetState extends State<SearchWidget> {
                     try {
                       final searchResult = await _tmdbService.searchMovies(value);
                       movieController.movies.value = searchResult['results'];
+                      if(movieController.movies.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!.noResult),
+                            duration: const Duration(seconds: 5),
+                          ),
+                        );
+                      }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -101,7 +101,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
-                    onTap: () {},
+                    onTap: () {
+                      movieController.selectedMovie.add(movie);
+                      pagesController.pageNumber.value = 2;
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
@@ -122,7 +125,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 5, right: 5),
                                   child: Text(
-                                    movie['title'], 
+                                    movie['title'],
                                     style: TextStyle(color: Theme.of(context).primaryColorDark),
                                   ),
                                 ),

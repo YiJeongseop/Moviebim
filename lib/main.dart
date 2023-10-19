@@ -12,6 +12,7 @@ import '../screens/home_screen.dart';
 late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
 bool englishTest = false;
+bool httpResponseTest = false;
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const HomeScreen(), transition: Transition.noTransition),
-        GetPage(name: '/add', page: () => AddScreen(), transition: Transition.noTransition),
+        GetPage(name: '/add', page: () => const AddScreen(), transition: Transition.noTransition),
       ],
     );
   }

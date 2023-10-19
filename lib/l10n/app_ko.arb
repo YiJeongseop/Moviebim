@@ -2,5 +2,7 @@
   "@@locale": "ko",
 
   "enterATitle" : "제목을 입력해주세요.",
-  "errorMessage" : "잠시 후에 다시 시도해 주세요."
+  "errorMessage" : "잠시 후에 다시 시도해 주세요.",
+  "noResult" : "검색 결과가 없습니다.",
+  "leaveAComment" : "이곳에 리뷰를 남겨주세요."
 }

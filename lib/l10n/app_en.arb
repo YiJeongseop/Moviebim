@@ -2,5 +2,7 @@
   "@@locale": "en",
 
   "enterATitle" : "Enter a title.",
-  "errorMessage" : "Please try again later."
+  "errorMessage" : "Please try again later.",
+  "noResult" : "No search results.",
+  "leaveAComment" : "Leave a comment here."
 }

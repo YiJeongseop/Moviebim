@@ -11,8 +11,11 @@ class TmdbService {
         'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query&language=$language'));
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
-      // throw Exception('Failed to search movies'); // for Test
+      if(!httpResponseTest){
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to search movies'); // for Test
+      }
     } else {
       throw Exception('Failed to search movies');
     }
