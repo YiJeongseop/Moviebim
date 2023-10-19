@@ -18,8 +18,7 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   final DayController dayController = Get.arguments[0];
   final int listIndex = Get.arguments[1];
-  final String dateStr = Get.arguments[2];
-  final int index = Get.arguments[3];
+  final int index = Get.arguments[2];
   final TextController textController = Get.put(TextController());
   final MovieController movieController = Get.put(MovieController());
   final PagesController pagesController = Get.put(PagesController());
@@ -38,12 +37,14 @@ class _EditScreenState extends State<EditScreen> {
   @override
   void initState() {
     movieController.selectedMovie.add(MovieModel(
-        title: dayController.savedMovies[listIndex][dateStr][index].title,
-        posterPath: dayController.savedMovies[listIndex][dateStr][index].posterPath,
-        rating: dayController.savedMovies[listIndex][dateStr][index].rating,
-        comment: dayController.savedMovies[listIndex][dateStr][index].comment));
-    movieController.movieRating.value = dayController.savedMovies[listIndex][dateStr][index].rating;
-    textController.movieComment.value = dayController.savedMovies[listIndex][dateStr][index].comment;
+      title: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].title,
+      posterPath: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].posterPath,
+      rating: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating,
+      comment: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment,
+      dateTime: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].dateTime,
+    ));
+    movieController.movieRating.value = dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating;
+    textController.movieComment.value = dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment;
     textEditingController = TextEditingController(text: movieController.selectedMovie[0].comment);
     super.initState();
   }
@@ -74,16 +75,17 @@ class _EditScreenState extends State<EditScreen> {
             actions: [
               IconButton(
                 onPressed: () {
-                  dayController.savedMovies[listIndex][dateStr].removeAt(index);
+                  dayController.savedMovies[listIndex][dayController.selectedDate.value].removeAt(index);
                   var temp = dayController.savedMovies[listIndex];
                   dayController.savedMovies.removeAt(listIndex);
-                  dayController.savedMovies.add(temp);
-                  dayController.savedMovies[dayController.savedMovies.length - 1][dateStr].add(
+                  dayController.savedMovies.insert(listIndex, temp);
+                  dayController.savedMovies[listIndex][dayController.selectedDate.value].add(
                     MovieModel(
-                        title: movieController.selectedMovie[0].title,
-                        posterPath: movieController.selectedMovie[0].posterPath,
-                        rating: movieController.movieRating.value,
-                        comment: textController.movieComment.value,
+                      title: movieController.selectedMovie[0].title,
+                      posterPath: movieController.selectedMovie[0].posterPath,
+                      rating: movieController.movieRating.value,
+                      comment: textController.movieComment.value,
+                      dateTime: movieController.selectedMovie[0].dateTime,
                     )
                   );
                   Get.back();

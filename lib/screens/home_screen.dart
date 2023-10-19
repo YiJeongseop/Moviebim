@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               initialDate: dayController.selectedDate.value,
               firstDate: DateTime(2023, 10, 1),
               lastDate: DateTime(2028, 10, 1),
-              onDateSelected: (date) => dayController.selectedDate.value = date,
+              onDateSelected: (date) => dayController.selectedDate.value = DateTime(date.year, date.month, date.day),
               leftMargin: 10,
               monthColor: Get.isDarkMode ? Colors.white : Colors.black,
               dayColor: Get.isDarkMode ? Colors.teal[200] : Colors.teal[600],
@@ -81,11 +81,10 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
             Expanded(
               child: Obx(() => ListView.separated(
-                itemCount: checkKeyInList(dayController.savedMovies, DateFormat('yyyy-MM-dd').format(dayController.selectedDate.value))
-                    ? dayController.savedMovies[listIndex][DateFormat('yyyy-MM-dd').format(dayController.selectedDate.value)].length
+                itemCount: checkKeyInList(dayController.savedMovies, dayController.selectedDate.value)
+                    ? dayController.savedMovies[listIndex][dayController.selectedDate.value].length
                     : 0,
                 itemBuilder: (BuildContext context, int index) {
-                  final dateStr = DateFormat('yyyy-MM-dd').format(dayController.selectedDate.value);
                   return Column(
                     children: [
                       Row(
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 20),
                             child: Image.network(
-                              dayController.savedMovies[listIndex][dateStr][index].posterPath,
+                              dayController.savedMovies[listIndex][dayController.selectedDate.value][index].posterPath,
                               height: (deviceWidth / 3) * 1.5,
                               width: deviceWidth / 3,
                               fit: BoxFit.fill,
@@ -108,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: (deviceWidth / 3) * 1.55,
                                   child: Text(
-                                    dayController.savedMovies[listIndex][dateStr][index].title,
+                                    dayController.savedMovies[listIndex][dayController.selectedDate.value][index].title,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.04, color: Theme.of(context).primaryColorDark),
                                   ),
@@ -117,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: (deviceWidth / 3) * 1.55,
                                   child: Text(
-                                    dayController.savedMovies[listIndex][dateStr][index].comment,
+                                    dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.035, color: Theme.of(context).primaryColorDark),
                                   ),
@@ -130,14 +129,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          StarWidget(rating: dayController.savedMovies[listIndex][dateStr][index].rating),
+                          StarWidget(rating: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating),
                           Expanded(child: Container()),
                           Container(
                             margin: const EdgeInsets.only(right: 10),
                             child: InkWell(
                               child: Icon(Icons.edit, color: Get.isDarkMode ? Colors.white70 : Colors.black54),
                               onTap: () {
-                                Get.toNamed('/edit', arguments: [dayController, listIndex, dateStr, index]);
+                                Get.toNamed('/edit', arguments: [dayController, listIndex, index]);
                               },
                             ),
                           ),
@@ -146,16 +145,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: InkWell(
                               child: Icon(Icons.delete_forever_outlined, color: Get.isDarkMode ? Colors.white70 : Colors.black54),
                               onTap: () {
-                                dayController.savedMovies[listIndex][dateStr].removeAt(index);
-                                var temp = dayController.savedMovies[listIndex];
-                                dayController.savedMovies.removeAt(listIndex);
-                                dayController.savedMovies.add(temp);
+                                dayController.savedMovies[listIndex][dayController.selectedDate.value].removeAt(index);
+                                if(dayController.savedMovies[listIndex][dayController.selectedDate.value].length == 0){
+                                  dayController.savedMovies.removeAt(listIndex);
+                                } else {
+                                  var temp = dayController.savedMovies[listIndex];
+                                  dayController.savedMovies.removeAt(listIndex);
+                                  dayController.savedMovies.insert(listIndex, temp);
+                                }
                               },
                             ),
                           ),
                         ],
                       ),
-                      if(dayController.savedMovies[listIndex][dateStr].length == index + 1)
+                      if(dayController.savedMovies[listIndex][dayController.selectedDate.value].length == index + 1)
                         SizedBox(height: (deviceWidth / 3) * 1.5),
                     ],
                   );
@@ -181,7 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: () {
                 // todo: change view
-                print(dayController.savedMovies); // for Debug
+                print("dayController.savedMovies : ${dayController.savedMovies}");
+                print("dayController.selectedDate : ${dayController.selectedDate}");
               },
             ),
             const SizedBox(height: 10),
@@ -204,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  bool checkKeyInList(List list, String target) {
+  bool checkKeyInList(List list, DateTime target) {
     for(int i = 0; i < list.length; i++){
       if(list[i].containsKey(target)){
         listIndex = i;

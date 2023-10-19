@@ -18,6 +18,8 @@ class SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    List<int> errorList = [];
     return Column(
       children: [
         Container(
@@ -57,16 +59,6 @@ class SearchWidget extends StatelessWidget {
                             duration: const Duration(seconds: 5),
                           ),
                         );
-                      } else {
-                        for(int i = 0; i < movieController.movies.length; i++){
-                          final response = await http.get(Uri.parse('https://image.tmdb.org/t/p/w500${movieController.movies[i]['poster_path']}'));
-                          if(response.statusCode == 200){
-                            continue;
-                          } else {
-                            movieController.movies.removeAt(i);
-                            i--;
-                          }
-                        }
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +93,7 @@ class SearchWidget extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                mainAxisExtent: (MediaQuery.of(context).size.width / 2.5) * 1.95,
+                mainAxisExtent: (deviceWidth / 2.5) * 1.95,
               ),
               itemCount: movieController.movies.length,
               itemBuilder: (context, index) {
@@ -113,8 +105,10 @@ class SearchWidget extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
                     onTap: () {
-                      movieController.selectedMovie.add(movie);
-                      pagesController.pageNumber.value = 2;
+                      if(!errorList.contains(index)){
+                        movieController.selectedMovie.add(movie);
+                        pagesController.pageNumber.value = 2;
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -126,9 +120,21 @@ class SearchWidget extends StatelessWidget {
                           const SizedBox(height: 5),
                           Image.network(
                             'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
-                            height: (MediaQuery.of(context).size.width / 2.5) * 1.5,
-                            width: MediaQuery.of(context).size.width / 2.5,
+                            height: (deviceWidth / 2.5) * 1.5,
+                            width: deviceWidth / 2.5,
                             fit: BoxFit.fill,
+                            errorBuilder: (context, object, stackTrace){
+                              errorList.add(index);
+                              return SizedBox(
+                                height: (deviceWidth / 2.5) * 1.5,
+                                width: deviceWidth / 2.5,
+                                child: Icon(
+                                  Icons.close,
+                                  color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                                  size: deviceWidth * 0.3,
+                                ),
+                              );
+                            },
                           ),
                           Expanded(
                             child: Center(
@@ -156,13 +162,4 @@ class SearchWidget extends StatelessWidget {
       ],
     );
   }
-  //
-  // Future<bool> checkPoster(dynamic movie) async {
-  //   final response = await http.get(Uri.parse('https://image.tmdb.org/t/p/w500${movie['poster_path']}'));
-  //   if (response.statusCode == 200) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import '../models/movie_model.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/pages_controller.dart';
@@ -75,31 +74,67 @@ class _AddScreenState extends State<AddScreen> {
                       )
                     : IconButton(
                         onPressed: () {
-                          final dateStr = DateFormat('yyyy-MM-dd').format(dayController.selectedDate.value);
-                          final dateExist = dayController.savedMovies.any((map) => map.containsKey(dateStr));
+                          final dateExist = dayController.savedMovies.any((map) => map.containsKey(dayController.selectedDate.value));
                           if(dateExist){
                             for(int i = 0; i < dayController.savedMovies.length; i++){
-                              if(dayController.savedMovies[i].containsKey(dateStr)){
-                                dayController.savedMovies[i][dateStr].add(MovieModel(
+                              if(dayController.savedMovies[i].containsKey(dayController.selectedDate.value)){
+                                dayController.savedMovies[i][dayController.selectedDate.value].add(MovieModel(
                                   title: movieController.selectedMovie[0]['title'],
                                   posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
                                   rating: movieController.movieRating.value,
                                   comment: textController.movieComment.value,
+                                  dateTime: dayController.selectedDate.value,
                                 ));
                                 break;
                               }
                             }
-                          } else {
+                          } else if (dayController.savedMovies.isEmpty) {
                             dayController.savedMovies.add(
                               {
-                                dateStr: [MovieModel(
+                                dayController.selectedDate.value: [MovieModel(
                                   title: movieController.selectedMovie[0]['title'],
                                   posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
                                   rating: movieController.movieRating.value,
                                   comment: textController.movieComment.value,
+                                  dateTime: dayController.selectedDate.value,
                                 )]
                               },
                             );
+                          }
+                          else {
+                            int i = 0;
+                            for (Map<DateTime, dynamic> map in dayController.savedMovies){
+                              DateTime temp = map.keys.toList()[0];
+                              if(temp.microsecondsSinceEpoch > dayController.selectedDate.value.microsecondsSinceEpoch){
+                                dayController.savedMovies.insert(i,
+                                  {
+                                    dayController.selectedDate.value: [MovieModel(
+                                      title: movieController.selectedMovie[0]['title'],
+                                      posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
+                                      rating: movieController.movieRating.value,
+                                      comment: textController.movieComment.value,
+                                      dateTime: dayController.selectedDate.value,
+                                    )]
+                                  },
+                                );
+                                break;
+                              }
+                              i++;
+                              if(i == dayController.savedMovies.length){
+                                dayController.savedMovies.add(
+                                  {
+                                    dayController.selectedDate.value: [MovieModel(
+                                      title: movieController.selectedMovie[0]['title'],
+                                      posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
+                                      rating: movieController.movieRating.value,
+                                      comment: textController.movieComment.value,
+                                      dateTime: dayController.selectedDate.value,
+                                    )]
+                                  },
+                                );
+                                break;
+                              }
+                            }
                           }
                           Get.back();
                         },
