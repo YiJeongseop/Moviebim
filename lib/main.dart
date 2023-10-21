@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../screens/add_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/edit_screen.dart';
+import '../screens/list_screen.dart';
 
 late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
@@ -86,6 +87,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const HomeScreen(), transition: Transition.noTransition),
         GetPage(name: '/add', page: () => const AddScreen(), transition: Transition.noTransition),
         GetPage(name: '/edit', page: () => const EditScreen(), transition: Transition.noTransition),
+        GetPage(name: '/list', page: () => ListScreen(), transition: Transition.noTransition),
       ],
     );
   }

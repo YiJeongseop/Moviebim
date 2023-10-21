@@ -74,47 +74,35 @@ class _AddScreenState extends State<AddScreen> {
                       )
                     : IconButton(
                         onPressed: () {
+                          final movieModel = MovieModel(
+                            title: movieController.selectedMovie[0]['title'],
+                            posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
+                            rating: movieController.movieRating.value,
+                            comment: textController.movieComment.value,
+                            dateTime: dayController.selectedDate.value,
+                          );
                           final dateExist = dayController.savedMovies.any((map) => map.containsKey(dayController.selectedDate.value));
                           if(dateExist){
                             for(int i = 0; i < dayController.savedMovies.length; i++){
                               if(dayController.savedMovies[i].containsKey(dayController.selectedDate.value)){
-                                dayController.savedMovies[i][dayController.selectedDate.value].add(MovieModel(
-                                  title: movieController.selectedMovie[0]['title'],
-                                  posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
-                                  rating: movieController.movieRating.value,
-                                  comment: textController.movieComment.value,
-                                  dateTime: dayController.selectedDate.value,
-                                ));
+                                dayController.savedMovies[i][dayController.selectedDate.value].add(movieModel);
                                 break;
                               }
                             }
                           } else if (dayController.savedMovies.isEmpty) {
                             dayController.savedMovies.add(
                               {
-                                dayController.selectedDate.value: [MovieModel(
-                                  title: movieController.selectedMovie[0]['title'],
-                                  posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
-                                  rating: movieController.movieRating.value,
-                                  comment: textController.movieComment.value,
-                                  dateTime: dayController.selectedDate.value,
-                                )]
+                                dayController.selectedDate.value: [movieModel]
                               },
                             );
-                          }
-                          else {
+                          } else {
                             int i = 0;
                             for (Map<DateTime, dynamic> map in dayController.savedMovies){
                               DateTime temp = map.keys.toList()[0];
                               if(temp.microsecondsSinceEpoch > dayController.selectedDate.value.microsecondsSinceEpoch){
                                 dayController.savedMovies.insert(i,
                                   {
-                                    dayController.selectedDate.value: [MovieModel(
-                                      title: movieController.selectedMovie[0]['title'],
-                                      posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
-                                      rating: movieController.movieRating.value,
-                                      comment: textController.movieComment.value,
-                                      dateTime: dayController.selectedDate.value,
-                                    )]
+                                    dayController.selectedDate.value: [movieModel]
                                   },
                                 );
                                 break;
@@ -123,19 +111,14 @@ class _AddScreenState extends State<AddScreen> {
                               if(i == dayController.savedMovies.length){
                                 dayController.savedMovies.add(
                                   {
-                                    dayController.selectedDate.value: [MovieModel(
-                                      title: movieController.selectedMovie[0]['title'],
-                                      posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
-                                      rating: movieController.movieRating.value,
-                                      comment: textController.movieComment.value,
-                                      dateTime: dayController.selectedDate.value,
-                                    )]
+                                    dayController.selectedDate.value: [movieModel]
                                   },
                                 );
                                 break;
                               }
                             }
                           }
+                          saveToListStar(movieModel, dayController);
                           Get.back();
                         },
                         icon: Icon(
@@ -173,5 +156,59 @@ class _AddScreenState extends State<AddScreen> {
         ),
       ),
     );
+  }
+}
+
+void saveToListStar(MovieModel movieModel, DayController dayController) {
+  switch (movieModel.rating){
+    case 5:
+      funcToSaveToListStar(movieModel, 0, 5, dayController);
+      break;
+    case 4.5:
+      funcToSaveToListStar(movieModel, 1, 4.5, dayController);
+      break;
+    case 4:
+      funcToSaveToListStar(movieModel, 2, 4, dayController);
+      break;
+    case 3.5:
+      funcToSaveToListStar(movieModel, 3, 3.5, dayController);
+      break;
+    case 3:
+      funcToSaveToListStar(movieModel, 4, 3, dayController);
+      break;
+    case 2.5:
+      funcToSaveToListStar(movieModel, 5, 2.5, dayController);
+      break;
+    case 2:
+      funcToSaveToListStar(movieModel, 6, 2, dayController);
+      break;
+    case 1.5:
+      funcToSaveToListStar(movieModel, 7, 1.5, dayController);
+      break;
+    case 1:
+      funcToSaveToListStar(movieModel, 8, 1, dayController);
+      break;
+    case 0.5:
+      funcToSaveToListStar(movieModel, 9, 0.5, dayController);
+      break;
+    default:
+  }
+}
+
+void funcToSaveToListStar(MovieModel movieModel, int index, double rating, DayController dayController) {
+  int j = 0;
+  if(dayController.savedMoviesStar[index][rating].isEmpty){
+    dayController.savedMoviesStar[index][rating].add(movieModel);
+  } else {
+    for(MovieModel i in dayController.savedMoviesStar[index][rating]) {
+      if(i.dateTime.microsecondsSinceEpoch > movieModel.dateTime.microsecondsSinceEpoch){
+        dayController.savedMoviesStar[index][rating].insert(j, movieModel);
+        break;
+      } else if (dayController.savedMoviesStar[index][rating].length == j + 1) {
+        dayController.savedMoviesStar[index][rating].add(movieModel);
+        break;
+      }
+      j++;
+    }
   }
 }

@@ -1,4 +1,6 @@
-class MovieModel {
+import 'package:equatable/equatable.dart';
+
+class MovieModel extends Equatable {
   final String title;
   final String posterPath;
   final double rating;
@@ -12,4 +14,7 @@ class MovieModel {
     required this.comment,
     required this.dateTime,
   });
+
+  @override
+  List<Object> get props => [title, posterPath, rating, comment, dateTime];
 }
