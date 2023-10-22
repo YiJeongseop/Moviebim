@@ -26,8 +26,9 @@ class AddWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: Get.isDarkMode ? Colors.white54: Colors.black12,
-                    width: 2),
+                  color: Get.isDarkMode ? Colors.white54: Colors.black12,
+                  width: 2,
+                ),
               ),
               padding: const EdgeInsets.all(3.0),
               child: Image.network(

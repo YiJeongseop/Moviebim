@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
-import 'package:intl/intl.dart';
-import 'package:moviebim/models/movie_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controllers/day_controller.dart';
+import '../controllers/basic_controller.dart';
+import '../models/movie_model.dart';
 import '../main.dart';
+import '../utilities/db_helper.dart';
 import '../widgets/star_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,19 +15,37 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+final dbHelper = DBHelper();
+
 class _HomeScreenState extends State<HomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final DayController dayController = Get.put(DayController());
+  final BasicController basicController = Get.put(BasicController());
   int listIndex = 0;
+  bool isLoading = true;
 
   _saveThemeStatus(bool value) async {
     SharedPreferences pref = await _prefs;
     pref.setBool('theme', value);
   }
 
+  Future<void> _initializeAsyncStuff() async {
+    List<dynamic> returnList = await dbHelper.getData();
+    basicController.savedMovies.value = returnList[0];
+    basicController.savedMoviesStar.value = returnList[1];
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _initializeAsyncStuff();
+    super.initState();
+  }
+
   @override
   void dispose() {
-    dayController.dispose();
+    basicController.dispose();
     super.dispose();
   }
 
@@ -60,16 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: Column(
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
             CalendarTimeline(
               showYears: false,
-              initialDate: dayController.selectedDate.value,
+              initialDate: basicController.selectedDate.value,
               firstDate: DateTime(2023, 10, 1),
               lastDate: DateTime(2028, 10, 1),
-              onDateSelected: (date) => dayController.selectedDate.value = DateTime(date.year, date.month, date.day),
+              onDateSelected: (date) => basicController.selectedDate.value = DateTime(date.year, date.month, date.day),
               leftMargin: 10,
               monthColor: Get.isDarkMode ? Colors.white : Colors.black,
               dayColor: Get.isDarkMode ? Colors.teal[200] : Colors.teal[600],
@@ -82,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
             Expanded(
               child: Obx(() => ListView.separated(
-                itemCount: checkKeyInList(dayController.savedMovies, dayController.selectedDate.value)
-                    ? dayController.savedMovies[listIndex][dayController.selectedDate.value].length
+                itemCount: checkKeyInList(basicController.savedMovies, basicController.selectedDate.value)
+                    ? basicController.savedMovies[listIndex][basicController.selectedDate.value].length
                     : 0,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
@@ -94,10 +114,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 20),
                             child: Image.network(
-                              dayController.savedMovies[listIndex][dayController.selectedDate.value][index].posterPath,
+                              basicController.savedMovies[listIndex][basicController.selectedDate.value][index].posterPath,
                               height: (deviceWidth / 3) * 1.5,
                               width: deviceWidth / 3,
                               fit: BoxFit.fill,
+                              errorBuilder: (context, object, stackTrace){
+                                return SizedBox(
+                                  height: (deviceWidth / 3) * 1.5,
+                                  width: deviceWidth / 3,
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                                    size: deviceWidth * 0.25,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           Padding(
@@ -108,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: (deviceWidth / 3) * 1.55,
                                   child: Text(
-                                    dayController.savedMovies[listIndex][dayController.selectedDate.value][index].title,
+                                    basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.04, color: Theme.of(context).primaryColorDark),
                                   ),
@@ -117,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   width: (deviceWidth / 3) * 1.55,
                                   child: Text(
-                                    dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment,
+                                    basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
                                     softWrap: true,
                                     style: TextStyle(fontSize: deviceWidth * 0.035, color: Theme.of(context).primaryColorDark),
                                   ),
@@ -131,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           StarWidget(
-                            rating: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating,
+                            rating: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating,
                             widthNum: 3,
                           ),
                           Expanded(child: Container()),
@@ -140,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: InkWell(
                               child: Icon(Icons.edit, color: Get.isDarkMode ? Colors.white70 : Colors.black54),
                               onTap: () {
-                                Get.toNamed('/edit', arguments: [dayController, listIndex, index]);
+                                Get.toNamed('/edit', arguments: [basicController, listIndex, index]);
                               },
                             ),
                           ),
@@ -150,27 +181,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Icon(Icons.delete_forever_outlined, color: Get.isDarkMode ? Colors.white70 : Colors.black54),
                               onTap: () {
                                 final movieModel = MovieModel(
-                                  title: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].title,
-                                  posterPath: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].posterPath,
-                                  rating: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating,
-                                  comment: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment,
-                                  dateTime: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].dateTime,
+                                  title: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
+                                  posterPath: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].posterPath,
+                                  rating: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating,
+                                  comment: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
+                                  dateTime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].dateTime,
                                 );
-                                deleteListStar(movieModel, dayController);
-                                dayController.savedMovies[listIndex][dayController.selectedDate.value].removeAt(index);
-                                if(dayController.savedMovies[listIndex][dayController.selectedDate.value].length == 0){
-                                  dayController.savedMovies.removeAt(listIndex);
+                                deleteListStar(movieModel, basicController);
+                                basicController.savedMovies[listIndex][basicController.selectedDate.value].removeAt(index);
+                                if(basicController.savedMovies[listIndex][basicController.selectedDate.value].length == 0){
+                                  basicController.savedMovies.removeAt(listIndex);
                                 } else {
-                                  var temp = dayController.savedMovies[listIndex];
-                                  dayController.savedMovies.removeAt(listIndex);
-                                  dayController.savedMovies.insert(listIndex, temp);
+                                  var temp = basicController.savedMovies[listIndex];
+                                  basicController.savedMovies.removeAt(listIndex);
+                                  basicController.savedMovies.insert(listIndex, temp);
                                 }
+                                dbHelper.deleteData(movieModel.title, movieModel.posterPath, movieModel.rating, movieModel.comment, movieModel.dateTime);
                               },
                             ),
                           ),
                         ],
                       ),
-                      if(dayController.savedMovies[listIndex][dayController.selectedDate.value].length == index + 1)
+                      if(basicController.savedMovies[listIndex][basicController.selectedDate.value].length == index + 1)
                         SizedBox(height: (deviceWidth / 3) * 1.5),
                     ],
                   );
@@ -182,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        floatingActionButton: Column(
+        floatingActionButton: isLoading ? null : Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
@@ -195,10 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: deviceWidth / 10,
               ),
               onPressed: () {
-                Get.toNamed('/list', arguments: dayController);
-                // print("dayController.savedMovies : ${dayController.savedMovies}");
-                // print("dayController.selectedDate : ${dayController.selectedDate}");
-                // print("dayController.savedMoviesStar : ${dayController.savedMoviesStar}");
+                Get.toNamed('/list', arguments: basicController);
               },
             ),
             const SizedBox(height: 10),
@@ -212,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: deviceWidth / 10,
               ),
               onPressed: () {
-                Get.toNamed('/add', arguments: dayController);
+                Get.toNamed('/add', arguments: basicController);
               },
             ),
           ],
@@ -232,99 +261,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-void deleteListStar(MovieModel movieModel, DayController dayController) {
+void deleteListStar(MovieModel movieModel, BasicController basicController) {
+  Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
+    2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
+  int index = temp[movieModel.rating]!;
   int j = 0;
-  switch (movieModel.rating){
-    case 5:
-      for(MovieModel i in dayController.savedMoviesStar[0][5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[0][5].removeAt(j);
-          break;
-        }
-        j++;
-      }
+  for(MovieModel i in basicController.savedMoviesStar[index][movieModel.rating]){
+    if(i == movieModel) {
+      basicController.savedMoviesStar[index][movieModel.rating].removeAt(j);
       break;
-    case 4.5:
-      for(MovieModel i in dayController.savedMoviesStar[1][4.5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[1][4.5].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 4:
-      for(MovieModel i in dayController.savedMoviesStar[2][4]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[2][4].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 3.5:
-      for(MovieModel i in dayController.savedMoviesStar[3][3.5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[3][3.5].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 3:
-      for(MovieModel i in dayController.savedMoviesStar[4][3]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[4][3].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 2.5:
-      for(MovieModel i in dayController.savedMoviesStar[5][2.5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[5][2.5].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 2:
-      for(MovieModel i in dayController.savedMoviesStar[6][2]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[6][2].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 1.5:
-      for(MovieModel i in dayController.savedMoviesStar[7][1.5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[7][1.5].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 1:
-      for(MovieModel i in dayController.savedMoviesStar[8][1]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[8][1].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    case 0.5:
-      for(MovieModel i in dayController.savedMoviesStar[9][0.5]){
-        if(i == movieModel) {
-          dayController.savedMoviesStar[9][0.5].removeAt(j);
-          break;
-        }
-        j++;
-      }
-      break;
-    default:
+    }
+    j++;
   }
 }

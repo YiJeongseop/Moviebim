@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/day_controller.dart';
+import '../controllers/basic_controller.dart';
 import '../controllers/pages_controller.dart';
-import '../models/movie_model.dart';
 import '../widgets/star_widget.dart';
 
 class ListScreen extends StatelessWidget {
   ListScreen({Key? key}) : super(key: key);
-  final DayController dayController = Get.arguments;
+  final BasicController basicController = Get.arguments;
   final PagesController pagesController = Get.put(PagesController());
 
   @override
@@ -66,6 +65,17 @@ class ListScreen extends StatelessWidget {
                                 height: (deviceWidth / 4) * 1.5,
                                 width: deviceWidth / 4,
                                 fit: BoxFit.fill,
+                                errorBuilder: (context, object, stackTrace){
+                                  return SizedBox(
+                                    height: (deviceWidth / 4) * 1.5,
+                                    width: deviceWidth / 4,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                                      size: deviceWidth * 0.2,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             Padding(
@@ -131,33 +141,19 @@ class ListScreen extends StatelessWidget {
   }
 
   int getListLength(bool isSortedByStar) {
+    Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
+      2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
     int returnValue = 0;
     if (isSortedByStar) {
-      int temp = dayController.savedMoviesStar[0][5].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[1][4.5].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[2][4].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[3][3.5].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[4][3].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[5][2.5].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[6][2].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[7][1.5].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[8][1].length;
-      returnValue += temp;
-      temp = dayController.savedMoviesStar[9][0.5].length;
-      returnValue += temp;
+      for(double i = 5; i > 0; i-=0.5){
+        int temp2 = basicController.savedMoviesStar[temp[i]!][i].length;
+        returnValue += temp2;
+      }
       return returnValue;
     } else {
-      for (int i = 0; i < dayController.savedMovies.length; i++) {
-        for (DateTime key in dayController.savedMovies[i].keys) {
-          int temp = dayController.savedMovies[i][key].length;
+      for (int i = 0; i < basicController.savedMovies.length; i++) {
+        for (DateTime key in basicController.savedMovies[i].keys) {
+          int temp = basicController.savedMovies[i][key].length;
           returnValue += temp;
         }
       }
@@ -167,26 +163,21 @@ class ListScreen extends StatelessWidget {
 
   List<dynamic> getListSortedByDate() {
     List<dynamic> returnList = [];
-    for (int i = 0; i < dayController.savedMovies.length; i++){
-     for (DateTime key in dayController.savedMovies[i].keys){
-       returnList += dayController.savedMovies[i][key];
+    for (int i = 0; i < basicController.savedMovies.length; i++){
+     for (DateTime key in basicController.savedMovies[i].keys){
+       returnList += basicController.savedMovies[i][key];
      }
     }
     return returnList;
   }
 
   List<dynamic> getListSortedByStar() {
+    Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
+      2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
     List<dynamic> returnList = [];
-    returnList += dayController.savedMoviesStar[0][5];
-    returnList += dayController.savedMoviesStar[1][4.5];
-    returnList += dayController.savedMoviesStar[2][4];
-    returnList += dayController.savedMoviesStar[3][3.5];
-    returnList += dayController.savedMoviesStar[4][3];
-    returnList += dayController.savedMoviesStar[5][2.5];
-    returnList += dayController.savedMoviesStar[6][2];
-    returnList += dayController.savedMoviesStar[7][1.5];
-    returnList += dayController.savedMoviesStar[8][1];
-    returnList += dayController.savedMoviesStar[9][0.5];
+    for(double i = 5; i > 0; i-=0.5){
+      returnList += basicController.savedMoviesStar[temp[i]!][i];
+    }
     return returnList;
   }
 }

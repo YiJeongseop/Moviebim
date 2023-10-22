@@ -6,7 +6,8 @@ import '../models/movie_model.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/pages_controller.dart';
 import '../controllers/text_controller.dart';
-import '../controllers/day_controller.dart';
+import '../controllers/basic_controller.dart';
+import '../utilities/db_helper.dart';
 import 'add_screen.dart';
 import 'home_screen.dart';
 
@@ -18,7 +19,7 @@ class EditScreen extends StatefulWidget {
 }
 
 class _EditScreenState extends State<EditScreen> {
-  final DayController dayController = Get.arguments[0];
+  final BasicController basicController = Get.arguments[0];
   final int listIndex = Get.arguments[1];
   final int index = Get.arguments[2];
   final TextController textController = Get.put(TextController());
@@ -39,14 +40,14 @@ class _EditScreenState extends State<EditScreen> {
   @override
   void initState() {
     movieController.selectedMovie.add(MovieModel(
-      title: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].title,
-      posterPath: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].posterPath,
-      rating: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating,
-      comment: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment,
-      dateTime: dayController.savedMovies[listIndex][dayController.selectedDate.value][index].dateTime,
+      title: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
+      posterPath: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].posterPath,
+      rating: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating,
+      comment: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
+      dateTime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].dateTime,
     ));
-    movieController.movieRating.value = dayController.savedMovies[listIndex][dayController.selectedDate.value][index].rating;
-    textController.movieComment.value = dayController.savedMovies[listIndex][dayController.selectedDate.value][index].comment;
+    movieController.movieRating.value = basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating;
+    textController.movieComment.value = basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment;
     textEditingController = TextEditingController(text: movieController.selectedMovie[0].comment);
     super.initState();
   }
@@ -84,13 +85,16 @@ class _EditScreenState extends State<EditScreen> {
                     comment: textController.movieComment.value,
                     dateTime: movieController.selectedMovie[0].dateTime,
                   );
-                  dayController.savedMovies[listIndex][dayController.selectedDate.value].removeAt(index);
-                  var temp = dayController.savedMovies[listIndex];
-                  dayController.savedMovies.removeAt(listIndex);
-                  dayController.savedMovies.insert(listIndex, temp);
-                  dayController.savedMovies[listIndex][dayController.selectedDate.value].add(movieModel);
-                  deleteListStar(movieController.selectedMovie[0], dayController);
-                  saveToListStar(movieModel, dayController);
+                  basicController.savedMovies[listIndex][basicController.selectedDate.value].removeAt(index);
+                  var temp = basicController.savedMovies[listIndex];
+                  basicController.savedMovies.removeAt(listIndex);
+                  basicController.savedMovies.insert(listIndex, temp);
+                  basicController.savedMovies[listIndex][basicController.selectedDate.value].add(movieModel);
+
+                  deleteListStar(movieController.selectedMovie[0], basicController);
+                  saveToListStar(movieModel, basicController);
+                  dbHelper.updateData(movieModel.rating, movieModel.comment, movieController.selectedMovie[0]);
+
                   Get.back();
                 },
                 icon: Icon(
@@ -173,165 +177,4 @@ class _EditScreenState extends State<EditScreen> {
       ),
     );
   }
-  //
-  // void deleteListStar(MovieModel movieModel, double rating) {
-  //   int j = 0;
-  //   switch (rating){
-  //     case 5:
-  //       for(MovieModel i in dayController.savedMoviesStar[0][5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[0][5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 4.5:
-  //       for(MovieModel i in dayController.savedMoviesStar[1][4.5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[1][4.5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 4:
-  //       for(MovieModel i in dayController.savedMoviesStar[2][4]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[2][4].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 3.5:
-  //       for(MovieModel i in dayController.savedMoviesStar[3][3.5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[3][3.5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 3:
-  //       for(MovieModel i in dayController.savedMoviesStar[4][3]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[4][3].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 2.5:
-  //       for(MovieModel i in dayController.savedMoviesStar[5][2.5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[5][2.5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 2:
-  //       for(MovieModel i in dayController.savedMoviesStar[6][2]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[6][2].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 1.5:
-  //       for(MovieModel i in dayController.savedMoviesStar[7][1.5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[7][1.5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 1:
-  //       for(MovieModel i in dayController.savedMoviesStar[8][1]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[8][1].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     case 0.5:
-  //       for(MovieModel i in dayController.savedMoviesStar[9][0.5]){
-  //         if(i == movieController.selectedMovie[0]) {
-  //           dayController.savedMoviesStar[9][0.5].removeAt(j);
-  //           saveListStar(movieModel, movieModel.rating);
-  //           break;
-  //         }
-  //         j++;
-  //       }
-  //       break;
-  //     default:
-  //   }
-  // }
-  //
-  // void saveListStar(MovieModel movieModel, double rating){
-  //   int j = 0;
-  //   switch (rating){
-  //     case 5:
-  //       funcToSaveToListStar(movieModel, 0, 5);
-  //       break;
-  //     case 4.5:
-  //       funcToSaveToListStar(movieModel, 1, 4.5);
-  //       break;
-  //     case 4:
-  //       funcToSaveToListStar(movieModel, 2, 4);
-  //       break;
-  //     case 3.5:
-  //       funcToSaveToListStar(movieModel, 3, 3.5);
-  //       break;
-  //     case 3:
-  //       funcToSaveToListStar(movieModel, 4, 3);
-  //       break;
-  //     case 2.5:
-  //       funcToSaveToListStar(movieModel, 5, 2.5);
-  //       break;
-  //     case 2:
-  //       funcToSaveToListStar(movieModel, 6, 2);
-  //       break;
-  //     case 1.5:
-  //       funcToSaveToListStar(movieModel, 7, 1.5);
-  //       break;
-  //     case 1:
-  //       funcToSaveToListStar(movieModel, 8, 1);
-  //       break;
-  //     case 0.5:
-  //       funcToSaveToListStar(movieModel, 9, 0.5);
-  //       break;
-  //     default:
-  //   }
-  // }
-  //
-  // void funcToSaveToListStar(MovieModel movieModel, int index, double rating) {
-  //   int j = 0;
-  //   if(dayController.savedMoviesStar[index][rating].isEmpty){
-  //     dayController.savedMoviesStar[index][rating].add(movieModel);
-  //   } else {
-  //     for(MovieModel i in dayController.savedMoviesStar[index][rating]) {
-  //       if(i.dateTime.microsecondsSinceEpoch > movieModel.dateTime.microsecondsSinceEpoch){
-  //         dayController.savedMoviesStar[index][rating].insert(j, movieModel);
-  //         break;
-  //       } else if (dayController.savedMoviesStar[index][rating].length == j) {
-  //         dayController.savedMoviesStar[index][rating].add(movieModel);
-  //       }
-  //     }
-  //     j++;
-  //   }
-  // }
 }
