@@ -45,3 +45,6 @@ app.*.map.json
 
 # TMDB API KEY
 /lib/api_key.dart
+
+# Firebase
+android/app/google-services.json

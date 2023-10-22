@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:http/http.dart' as http;
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 import '../controllers/pages_controller.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:moviebim/widgets/drawer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/basic_controller.dart';
 import '../models/movie_model.dart';
@@ -55,25 +56,39 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
+        drawer: DrawerWidget(),
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          iconTheme: IconThemeData(
+            color: Theme.of(context).primaryColorDark,
+            size: deviceWidth / 12,
+          ),
+          leading: Builder(
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: IconButton(
+                  onPressed: (){
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: const Icon(
+                    Icons.menu,
+                  ),
+                  splashRadius: deviceWidth / 18,
+                ),
+              );
+            },
+          ),
           actions: [
             IconButton(
               onPressed: () {
                 _saveThemeStatus(!Get.isDarkMode);
                 Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,);
               },
-              icon: Get.isDarkMode
-                  ? Icon(
-                      Icons.light_mode,
-                      color: Colors.white,
-                      size: deviceWidth / 12,
-                    )
-                  : Icon(
-                      Icons.dark_mode,
-                      color: Colors.black,
-                      size: deviceWidth / 12,
-                    ),
+              icon: Icon(
+                Get.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                size: deviceWidth / 12,
+              ),
               splashRadius: deviceWidth / 18,
             ),
           ],
