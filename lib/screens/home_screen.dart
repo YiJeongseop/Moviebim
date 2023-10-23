@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:moviebim/controllers/login_controller.dart';
 import 'package:moviebim/widgets/drawer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/basic_controller.dart';
@@ -21,6 +22,7 @@ final dbHelper = DBHelper();
 class _HomeScreenState extends State<HomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final BasicController basicController = Get.put(BasicController());
+  final LoginController loginController = Get.put(LoginController());
   int listIndex = 0;
   bool isLoading = true;
 
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        drawer: DrawerWidget(),
+        drawer: DrawerWidget(loginController: loginController),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
