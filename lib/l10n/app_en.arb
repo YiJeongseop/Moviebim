@@ -5,7 +5,11 @@
   "errorMessage" : "Please try again later.",
   "noResult" : "No search results.",
   "leaveAComment" : "Leave a comment here.",
-  "loginFail" : "Login failed: Please check your internet connection!",
+  "failed" : "Failed: Please check your internet connection!",
   "login" : "Login",
-  "logout" : "Logout"
+  "logout" : "Logout",
+  "noSavedFiles" : "No saved files found.",
+  "sync" : "Sync with Google Drive",
+  "save" : "Save",
+  "load" : "Load"
 }

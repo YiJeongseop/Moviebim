@@ -5,7 +5,11 @@
   "errorMessage" : "잠시 후에 다시 시도해 주세요.",
   "noResult" : "검색 결과가 없습니다.",
   "leaveAComment" : "이곳에 리뷰를 남겨주세요.",
-  "loginFail" : "로그인 실패 : 인터넷 연결을 확인해주세요!",
+  "failed" : "실패 : 인터넷 연결을 확인해주세요!",
   "login" : "로그인",
-  "logout" : "로그아웃"
+  "logout" : "로그아웃",
+  "noSavedFiles" : "저장된 파일이 없습니다.",
+  "sync" : "구글 드라이브 동기화",
+  "save" : "저장하기",
+  "load" : "불러오기"
 }

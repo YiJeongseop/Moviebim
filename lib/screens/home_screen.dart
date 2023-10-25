@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        drawer: DrawerWidget(loginController: loginController),
+        drawer: DrawerWidget(loginController: loginController, basicController: basicController),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           iconTheme: IconThemeData(

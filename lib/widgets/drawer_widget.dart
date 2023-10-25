@@ -2,12 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moviebim/controllers/basic_controller.dart';
 import '../controllers/login_controller.dart';
+import '../models/movie_model.dart';
 import '../services/google_service.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key, required this.loginController}) : super(key: key);
+  const DrawerWidget({Key? key, required this.loginController, required this.basicController}) : super(key: key);
   final LoginController loginController;
+  final BasicController basicController;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +31,14 @@ class DrawerWidget extends StatelessWidget {
                         stream: FirebaseAuth.instance.authStateChanges(),
                         builder: (context, snapshot) {
                           if(snapshot.connectionState == ConnectionState.active && !snapshot.hasData){
-                            loginController.isLogined.value = false;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              loginController.isLogined.value = false;
+                            });
                           }
                           if(snapshot.hasData || loginController.isLogined.value){
-                            loginController.isLogined.value = true;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              loginController.isLogined.value = true;
+                            });
                             return SizedBox(
                               height: deviceHeight * 0.12,
                               child: ClipRRect(
@@ -117,7 +124,34 @@ class DrawerWidget extends StatelessWidget {
                         );
                       }
                     }
-                  )
+                  ),
+                  Obx(() => loginController.isLogined.value
+                    ? ListTile(
+                        minLeadingWidth : 20,
+                        leading: Icon(
+                          Icons.sync,
+                          size: 30,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        title: Text(
+                          AppLocalizations.of(context)!.sync,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                            fontSize: deviceWidth * 0.04,
+                          ),
+                        ),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (BuildContext context) {
+                              return driveAlertDialog(context, basicController);
+                            }
+                          );
+                        },
+                    )
+                    : const SizedBox.shrink()
+                  ),
                 ],
               )
             )
@@ -189,6 +223,58 @@ AlertDialog loginAlertDialog(BuildContext context) {
           ],
         )
       ),
+    ),
+  );
+}
+
+AlertDialog driveAlertDialog(BuildContext context, BasicController basicController) {
+  return AlertDialog(
+    backgroundColor: Colors.white,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            Get.dialog(const LoadingOverlay(), barrierDismissible: false);
+
+            List<MovieModel> movies = [];
+            for (int i = 0; i < basicController.savedMovies.length; i++){
+              DateTime key = basicController.savedMovies[i].keys.first;
+              movies += basicController.savedMovies[i][key];
+            }
+
+            await uploadToDrive(movies, context);
+            Get.back();
+            Get.back();
+            Get.back();
+          },
+          child: Text(
+            AppLocalizations.of(context)!.save,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            Get.dialog(const LoadingOverlay(), barrierDismissible: false);
+
+            List<dynamic>? result = await downloadFromDrive(context);
+            if(result == null) {
+              Get.back();
+              Get.back();
+              Get.back();
+            } else {
+              basicController.savedMovies.value = result[0];
+              basicController.savedMoviesStar.value = result[1];
+              Get.back();
+              Get.back();
+              Get.back();
+            }
+          },
+          child: Text(
+            AppLocalizations.of(context)!.load,
+          ),
+        ),
+      ],
     ),
   );
 }
