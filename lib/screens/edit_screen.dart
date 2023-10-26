@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../models/movie_model.dart';
 import '../controllers/movie_controller.dart';
-import '../controllers/pages_controller.dart';
 import '../controllers/text_controller.dart';
 import '../controllers/basic_controller.dart';
-import '../utilities/db_helper.dart';
 import 'add_screen.dart';
 import 'home_screen.dart';
 
@@ -24,7 +23,6 @@ class _EditScreenState extends State<EditScreen> {
   final int index = Get.arguments[2];
   final TextController textController = Get.put(TextController());
   final MovieController movieController = Get.put(MovieController());
-  final PagesController pagesController = Get.put(PagesController());
   FocusNode textFocus = FocusNode();
   late final TextEditingController textEditingController;
 
@@ -32,7 +30,6 @@ class _EditScreenState extends State<EditScreen> {
   void dispose() {
     textController.dispose();
     movieController.dispose();
-    pagesController.dispose();
     textEditingController.dispose();
     super.dispose();
   }

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 
 class AddWidget extends StatelessWidget {
-  const AddWidget({Key? key, required this.movieController, required this.textController, required this.textFocus}) : super(key: key);
+  const AddWidget({Key? key,
+    required this.movieController, required this.textController, required this.textFocus})
+      : super(key: key);
 
   final MovieController movieController;
   final TextController textController;

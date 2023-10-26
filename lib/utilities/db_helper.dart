@@ -1,6 +1,8 @@
-import 'package:sqflite/sqflite.dart';
 import 'dart:core';
+
+import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+
 import '../models/movie_model.dart';
 
 const String dbName = 'test2.db';

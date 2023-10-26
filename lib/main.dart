@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,10 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import '../screens/add_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/edit_screen.dart';
-import '../screens/list_screen.dart';
 
 late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
@@ -89,7 +90,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const HomeScreen(), transition: Transition.noTransition),
         GetPage(name: '/add', page: () => const AddScreen(), transition: Transition.noTransition),
         GetPage(name: '/edit', page: () => const EditScreen(), transition: Transition.noTransition),
-        GetPage(name: '/list', page: () => ListScreen(), transition: Transition.noTransition),
       ],
     );
   }

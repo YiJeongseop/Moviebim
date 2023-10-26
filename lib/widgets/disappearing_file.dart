@@ -2,13 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:moviebim/controllers/basic_controller.dart';
+
+import '../controllers/basic_controller.dart';
 import '../controllers/login_controller.dart';
 import '../models/movie_model.dart';
 import '../services/google_service.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key, required this.loginController, required this.basicController}) : super(key: key);
+  const DrawerWidget({Key? key, required this.loginController, required this.basicController})
+      : super(key: key);
   final LoginController loginController;
   final BasicController basicController;
 

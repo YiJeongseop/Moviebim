@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../controllers/add_page_controller.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
-import '../controllers/pages_controller.dart';
 import '../services/tmdb_service.dart';
 
 class SearchWidget extends StatelessWidget {
-  SearchWidget({Key? key, required this.movieController, required this.textController, required this.pagesController, required this.textFocus}) : super(key: key);
+  SearchWidget({Key? key, required this.movieController, required this.textController, required this.addPageController, required this.textFocus}) : super(key: key);
 
   final TmdbService _tmdbService = TmdbService();
   final MovieController movieController;
   final TextController textController;
-  final PagesController pagesController;
+  final AddPageController addPageController;
   final FocusNode textFocus;
 
   @override
@@ -75,7 +76,7 @@ class SearchWidget extends StatelessWidget {
                 child: Icon(
                   Icons.search,
                   color: Get.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.grey,
-                  size: 25,
+                  size: deviceWidth / 15,
                 ),
               ),
             ],
@@ -106,7 +107,7 @@ class SearchWidget extends StatelessWidget {
                     onTap: () {
                       if(!errorList.contains(index)){
                         movieController.selectedMovie.add(movie);
-                        pagesController.pageNumber.value = 2;
+                        addPageController.pageNumber.value = 2;
                       }
                     },
                     child: Container(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moviebim/screens/home_screen.dart';
+
+import '../controllers/add_page_controller.dart';
+import '../screens/home_screen.dart';
 import '../models/movie_model.dart';
 import '../controllers/movie_controller.dart';
-import '../controllers/pages_controller.dart';
 import '../controllers/text_controller.dart';
 import '../controllers/basic_controller.dart';
 import '../utilities/db_helper.dart';
@@ -21,14 +22,14 @@ class _AddScreenState extends State<AddScreen> {
   final BasicController basicController = Get.arguments;
   final TextController textController = Get.put(TextController());
   final MovieController movieController = Get.put(MovieController());
-  final PagesController pagesController = Get.put(PagesController());
+  final AddPageController addPageController = Get.put(AddPageController());
   FocusNode textFocus = FocusNode();
 
   @override
   void dispose() {
     textController.dispose();
     movieController.dispose();
-    pagesController.dispose();
+    addPageController.dispose();
     super.dispose();
   }
 
@@ -45,11 +46,11 @@ class _AddScreenState extends State<AddScreen> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             leading: Obx(
-              () => pagesController.pageNumber.value == 2
+              () => addPageController.pageNumber.value == 2
                   ? IconButton(
                       onPressed: () {
                         movieController.selectedMovie.clear();
-                        pagesController.pageNumber.value = 1;
+                        addPageController.pageNumber.value = 1;
                       },
                       icon: Icon(
                         Icons.arrow_back,
@@ -62,7 +63,7 @@ class _AddScreenState extends State<AddScreen> {
             ),
             actions: [
               Obx(
-                () => (pagesController.pageNumber.value == 1)
+                () => (addPageController.pageNumber.value == 1)
                     ? IconButton(
                         onPressed: () {
                           Get.back();
@@ -148,11 +149,11 @@ class _AddScreenState extends State<AddScreen> {
               const SizedBox(height: 10),
               Expanded(
                 child: Obx(
-                  () => (pagesController.pageNumber.value == 1)
+                  () => (addPageController.pageNumber.value == 1)
                       ? SearchWidget(
                           movieController: movieController,
                           textController: textController,
-                          pagesController: pagesController,
+                          addPageController: addPageController,
                           textFocus: textFocus,
                         )
                       : AddWidget(
