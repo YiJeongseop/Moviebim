@@ -48,7 +48,3 @@ app.*.map.json
 
 # Firebase
 android/app/google-services.json
-
-# Admob
-/android/app/src/main/AndroidManifest.xml
-/lib/ad_id.dart
