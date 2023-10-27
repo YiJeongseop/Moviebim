@@ -13,4 +13,5 @@ key.properties
 **/*.jks
 
 # Admob
-/app/src/main/AndroidManifest.xml
+android/app/src/main/AndroidManifest.xml
+
