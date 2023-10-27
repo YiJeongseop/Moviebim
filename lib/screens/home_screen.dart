@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    loadInterstitialAd();
     _getRuntime();
     _widgetOptions.add(CalendarScreen(basicController: basicController));
     _widgetOptions.add(ListScreen(basicController: basicController));

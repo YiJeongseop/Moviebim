@@ -41,7 +41,7 @@ class MyPageScreen extends StatelessWidget {
       ),
       size: AdSize.banner,
       adUnitId: useRealAdId ? realBannerAdId : testBannerAdId,
-      request: const AdRequest(),
+      request: status == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
     )..load();
 
     final deviceWidth = MediaQuery.of(context).size.width;

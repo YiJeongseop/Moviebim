@@ -13,12 +13,16 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../screens/add_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/edit_screen.dart';
+import 'api_key.dart';
+import '../services/admob_service.dart';
 
 late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
 bool englishTest = false;
 bool httpResponseTest = false;
 bool useRealAdId = false;
+bool consentTest = true;
+var status; // consent status
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -56,6 +60,33 @@ class MyApp extends StatelessWidget {
 
   MyApp() {
     _getThemeStatus();
+
+    final ConsentRequestParameters params;
+    if(!consentTest){
+      params = ConsentRequestParameters();
+    } else {
+      ConsentDebugSettings debugSettings = ConsentDebugSettings(
+          debugGeography: DebugGeography.debugGeographyEea,
+          testIdentifiers: [testId1, testId2]); // for Test
+      params = ConsentRequestParameters(consentDebugSettings: debugSettings);
+    }
+
+    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
+      if (await ConsentInformation.instance.isConsentFormAvailable()) {
+        loadForm();
+      }
+    }, (error) {});
+
+    loadInterstitialAd();
+  }
+
+  void loadForm() {
+    ConsentForm.loadConsentForm((ConsentForm consentForm) async {
+        status = await ConsentInformation.instance.getConsentStatus();
+        if (status == ConsentStatus.required) {
+          consentForm.show((formError) {});
+        }
+      }, (formError) {});
   }
 
   @override
