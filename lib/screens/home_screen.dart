@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../controllers/login_controller.dart';
 import '../controllers/basic_controller.dart';
@@ -9,6 +10,7 @@ import '../models/movie_model.dart';
 import '../utilities/db_helper.dart';
 import '../screens/calendar_screen.dart';
 import 'list_screen.dart';
+import 'my_page_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ final dbHelper = DBHelper();
 
 class _HomeScreenState extends State<HomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late final BasicController basicController = Get.put(BasicController());
+  final BasicController basicController = Get.put(BasicController());
   final ListController listController = Get.put(ListController());
   final LoginController loginController = Get.put(LoginController());
 
@@ -29,9 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   int _selectedIndex = 0;
 
-  _saveThemeStatus(bool value) async {
+  _getRuntime() async {
     SharedPreferences pref = await _prefs;
-    pref.setBool('theme', value);
+    final value = pref.getInt('runtime') ?? -1;
+    if(value != -1){
+      basicController.entireRuntime.value = value;
+    }
   }
 
   Future<void> _initializeAsyncStuff() async {
@@ -45,8 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    _getRuntime();
     _widgetOptions.add(CalendarScreen(basicController: basicController));
     _widgetOptions.add(ListScreen(basicController: basicController));
+    _widgetOptions.add(MyPageScreen(basicController: basicController, loginController: loginController));
     _initializeAsyncStuff();
     super.initState();
   }
@@ -83,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       icon: Icon(
                         Icons.add,
+                        color: Theme.of(context).primaryColorDark,
                         size: deviceWidth / 12,
                       ),
                       splashRadius: deviceWidth / 18,
@@ -107,18 +115,18 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: isLoading
             ? null
             : BottomNavigationBar(
-                items: const [
+                items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.calendar_month),
-                    label: '날짜 별로 보기',
+                    icon: Icon(Icons.calendar_month, size: deviceWidth / 15),
+                    label: AppLocalizations.of(context)!.viewByDate,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
-                    label: '전체 보기',
+                    icon: Icon(Icons.list, size: deviceWidth / 15),
+                    label: AppLocalizations.of(context)!.viewAll,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.people),
-                    label: '마이페이지',
+                    icon: Icon(Icons.people, size: deviceWidth / 15),
+                    label: AppLocalizations.of(context)!.myPage,
                   ),
                 ],
                 currentIndex: _selectedIndex,

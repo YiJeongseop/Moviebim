@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/add_page_controller.dart';
 import '../screens/home_screen.dart';
@@ -19,11 +20,17 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final BasicController basicController = Get.arguments;
   final TextController textController = Get.put(TextController());
   final MovieController movieController = Get.put(MovieController());
   final AddPageController addPageController = Get.put(AddPageController());
   FocusNode textFocus = FocusNode();
+
+  _saveRuntime(int value) async {
+    SharedPreferences pref = await _prefs;
+    pref.setInt('runtime', value);
+  }
 
   @override
   void dispose() {
@@ -83,6 +90,7 @@ class _AddScreenState extends State<AddScreen> {
                             rating: movieController.movieRating.value,
                             comment: textController.movieComment.value,
                             dateTime: basicController.selectedDate.value,
+                            runtime: movieController.movieRuntime.value,
                           );
                           final dateExist = basicController.savedMovies.any((map) => map.containsKey(basicController.selectedDate.value));
                           if(dateExist){
@@ -129,7 +137,11 @@ class _AddScreenState extends State<AddScreen> {
                             columnRating: movieModel.rating,
                             columnComment: movieModel.comment,
                             columnDateTime: movieModel.dateTime.toString().split(' ')[0],
+                            columnRuntime: movieModel.runtime
                           });
+
+                          basicController.entireRuntime.value += movieModel.runtime;
+                          _saveRuntime(basicController.entireRuntime.value);
 
                           Get.back();
                         },

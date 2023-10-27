@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../screens/add_screen.dart';
 import '../screens/home_screen.dart';
@@ -17,6 +18,7 @@ late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
 bool englishTest = false;
 bool httpResponseTest = false;
+bool useRealAdId = false;
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,

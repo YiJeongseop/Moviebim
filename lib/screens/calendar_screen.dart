@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/basic_controller.dart';
 import '../main.dart';
@@ -11,8 +12,14 @@ import 'home_screen.dart';
 class CalendarScreen extends StatelessWidget {
   CalendarScreen({Key? key, required this.basicController}) : super(key: key);
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final BasicController basicController;
   int listIndex = 0;
+
+  _saveRuntime(int value) async {
+    SharedPreferences pref = await _prefs;
+    pref.setInt('runtime', value);
+  }
 
   bool checkKeyInList(List list, DateTime target) {
     for (int i = 0; i < list.length; i++) {
@@ -133,6 +140,7 @@ class CalendarScreen extends StatelessWidget {
                               rating: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating,
                               comment: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
                               dateTime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].dateTime,
+                              runtime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].runtime,
                             );
                             deleteListStar(movieModel, basicController);
                             basicController.savedMovies[listIndex][basicController.selectedDate.value].removeAt(index);
@@ -143,7 +151,10 @@ class CalendarScreen extends StatelessWidget {
                               basicController.savedMovies.removeAt(listIndex);
                               basicController.savedMovies.insert(listIndex, temp);
                             }
-                            dbHelper.deleteData(movieModel.title, movieModel.posterPath, movieModel.rating, movieModel.comment, movieModel.dateTime);
+                            dbHelper.deleteData(movieModel.title, movieModel.posterPath, movieModel.rating, movieModel.comment, movieModel.dateTime, movieModel.runtime);
+
+                            basicController.entireRuntime.value -= movieModel.runtime;
+                            _saveRuntime(basicController.entireRuntime.value);
                           },
                         ),
                       ),

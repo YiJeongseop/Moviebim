@@ -4,4 +4,5 @@ class MovieController extends GetxController{
   RxList<dynamic> movies = [].obs;
   RxList<dynamic> selectedMovie = [].obs;
   RxDouble movieRating = 3.0.obs;
+  RxInt movieRuntime = 0.obs;
 }

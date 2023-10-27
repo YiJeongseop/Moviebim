@@ -21,4 +21,22 @@ class TmdbService {
       throw Exception('Failed to search movies');
     }
   }
+
+  Future<int> fetchRuntime(int movieId) async {
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final int runtime;
+      try{
+        runtime = data['runtime'];
+      } catch (e) {
+        return 0;
+      }
+      return runtime;
+    } else {
+      throw Exception('Failed to fetch runtime');
+    }
+  }
 }

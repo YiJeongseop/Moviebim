@@ -6,10 +6,13 @@
   "noResult" : "No search results.",
   "leaveAComment" : "Leave a comment here.",
   "failed" : "Failed: Please check your internet connection!",
-  "login" : "Login",
+  "login" : "Go to Login Screen",
   "logout" : "Logout",
   "noSavedFiles" : "No saved files found.",
-  "sync" : "Sync with Google Drive",
-  "save" : "Save",
-  "load" : "Load"
+  "save" : "Save to Google Drive",
+  "load" : "Load from Google Drive",
+  "viewByDate" : "View by Date",
+  "viewAll" : "View All",
+  "myPage" : "My Page",
+  "changeTheme" : "Change Theme"
 }

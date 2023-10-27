@@ -5,13 +5,16 @@ import 'package:path/path.dart';
 
 import '../models/movie_model.dart';
 
-const String dbName = 'test2.db';
+const String dbName = 'test5.db';
 const String tableMovie = 'tableMovie';
 const String columnTitle = 'title';
 const String columnPosterPath = 'posterPath';
 const String columnRating = 'rating';
 const String columnComment = 'comment';
 const String columnDateTime = 'dateTime';
+const String columnRuntime = 'runtime';
+
+const List<double> star = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
 
 class DBHelper {
   Database? _database;
@@ -38,7 +41,8 @@ class DBHelper {
             $columnPosterPath TEXT NOT NULL,
             $columnRating REAL NOT NULL,
             $columnComment TEXT,
-            $columnDateTime TEXT NOT NULL)
+            $columnDateTime TEXT NOT NULL,
+            $columnRuntime REAL NOT NULL)
         ''');
       }
     );
@@ -51,33 +55,42 @@ class DBHelper {
     await batch.commit();
   }
 
-  // Future<void> insertAllData(List<Appointment> appointments) async {
-  //   final db = await database;
-  //   await db!.rawDelete("DELETE FROM $tableAppointment");
-  //   final batch = db.batch();
-  //
-  //   List<Map<String, dynamic>> jsonList = appointmentsToJsonList(appointments, false);
-  //   for(int i = 0; i < jsonList.length; i++){
-  //     batch.insert(tableAppointment, jsonList[i]);
-  //   }
-  //
-  //   await batch.commit();
-  // }
+  Future<void> insertAllData(List<dynamic> moviesSortedByStar) async {
+    final db = await database;
+    await db!.rawDelete("DELETE FROM $tableMovie");
+    final batch = db.batch();
 
-  Future<void> deleteData(String title, String posterPath, num rating, String comment, DateTime dateTime) async {
+    for(int i = 0; i < 10; i++) {
+      for(MovieModel j in moviesSortedByStar[i][star[i]]){
+        Map<String, dynamic> data = {
+          columnTitle: j.title,
+          columnPosterPath: j.posterPath,
+          columnRating: j.rating,
+          columnComment: j.comment,
+          columnDateTime: j.dateTime.toString().split(' ')[0],
+          columnRuntime: j.runtime
+        };
+        batch.insert(tableMovie, data);
+      }
+    }
+
+    await batch.commit();
+  }
+
+  Future<void> deleteData(String title, String posterPath, num rating, String comment, DateTime dateTime, int runtime) async {
     final dateStr = dateTime.toString().split(' ')[0];
     final db = await database;
     await db!.delete(
         tableMovie,
-        where: '$columnTitle = ? and $columnPosterPath = ? and $columnRating = ? and $columnComment = ? and $columnDateTime = ?',
-        whereArgs: [title, posterPath, rating, comment, dateStr]
+        where: '$columnTitle = ? and $columnPosterPath = ? and $columnRating = ? and $columnComment = ? and $columnDateTime = ? and $columnRuntime = ?',
+        whereArgs: [title, posterPath, rating, comment, dateStr, runtime]
     );
   }
 
-  // Future<void> deleteAllData() async {
-  //   final db = await database;
-  //   await db!.rawDelete("DELETE FROM $tableMovie");
-  // }
+  Future<void> deleteAllData() async {
+    final db = await database;
+    await db!.rawDelete("DELETE FROM $tableMovie");
+  }
 
   Future<void> updateData(num rating, String comment, MovieModel before) async {
     final db = await database;
@@ -86,8 +99,8 @@ class DBHelper {
     batch.update(
       tableMovie,
       {columnRating: rating, columnComment: comment},
-      where: '$columnTitle = ? and $columnPosterPath = ? and $columnRating = ? and $columnComment = ? and $columnDateTime = ?',
-      whereArgs: [before.title, before.posterPath, before.rating, before.comment, dateStr]
+      where: '$columnTitle = ? and $columnPosterPath = ? and $columnRating = ? and $columnComment = ? and $columnDateTime = ? and $columnRuntime = ?',
+      whereArgs: [before.title, before.posterPath, before.rating, before.comment, dateStr, before.runtime]
     );
     await batch.commit();
   }
@@ -112,7 +125,8 @@ class DBHelper {
           posterPath: movie[columnPosterPath],
           rating: movie[columnRating].toDouble(),
           comment: movie[columnComment],
-          dateTime: dateTime
+          dateTime: dateTime,
+          runtime: movie[columnRuntime].toInt(),
       );
       if(dateExist) {
         for (int i = 0; i < returnList[0].length; i++){
@@ -144,8 +158,6 @@ class DBHelper {
     });
 
     for(int i = 0; i < 10; i++){
-      List<double> star = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
-
       returnList[1][i][star[i]].sort((a, b) {
         final DateTime dateA = a.dateTime;
         final DateTime dateB = b.dateTime;

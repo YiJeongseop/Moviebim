@@ -11,7 +11,7 @@ import "package:http/http.dart" as http;
 
 import '../models/movie_model.dart';
 
-const String fileName = 'test.json';
+const String fileName = 'test5.json';
 final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [drive.DriveApi.driveFileScope, drive.DriveApi.driveAppdataScope]
 );
@@ -136,6 +136,7 @@ List<Map<String, dynamic>> moviesToJsonList(List<MovieModel> movies) {
         'rating': movie.rating.toString(),
         'comment': movie.comment,
         'dateTime': movie.dateTime.toString().split(' ')[0],
+        'runtime': movie.runtime.toString(),
       }
     );
   }
@@ -189,6 +190,7 @@ Future<List<dynamic>?> downloadFromDrive(BuildContext context) async {
       rating: double.parse(movie['rating']),
       comment: movie['comment'],
       dateTime: dateTime,
+      runtime: int.parse(movie['runtime']),
     );
 
     if(dateExist) {

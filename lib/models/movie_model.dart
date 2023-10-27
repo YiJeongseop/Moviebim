@@ -6,6 +6,7 @@ class MovieModel extends Equatable {
   final double rating;
   final String comment;
   final DateTime dateTime;
+  final int runtime;
 
   MovieModel({
     required this.title,
@@ -13,8 +14,9 @@ class MovieModel extends Equatable {
     required this.rating,
     required this.comment,
     required this.dateTime,
+    required this.runtime,
   });
 
   @override
-  List<Object> get props => [title, posterPath, rating, comment, dateTime];
+  List<Object> get props => [title, posterPath, rating, comment, dateTime, runtime];
 }

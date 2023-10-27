@@ -42,6 +42,7 @@ class _EditScreenState extends State<EditScreen> {
       rating: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating,
       comment: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
       dateTime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].dateTime,
+      runtime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].runtime,
     ));
     movieController.movieRating.value = basicController.savedMovies[listIndex][basicController.selectedDate.value][index].rating;
     textController.movieComment.value = basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment;
@@ -81,6 +82,7 @@ class _EditScreenState extends State<EditScreen> {
                     rating: movieController.movieRating.value,
                     comment: textController.movieComment.value,
                     dateTime: movieController.selectedMovie[0].dateTime,
+                    runtime: movieController.selectedMovie[0].runtime,
                   );
                   basicController.savedMovies[listIndex][basicController.selectedDate.value].removeAt(index);
                   var temp = basicController.savedMovies[listIndex];

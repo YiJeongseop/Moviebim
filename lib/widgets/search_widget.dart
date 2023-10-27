@@ -104,10 +104,30 @@ class SearchWidget extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
-                    onTap: () {
+                    onTap: () async {
                       if(!errorList.contains(index)){
-                        movieController.selectedMovie.add(movie);
-                        addPageController.pageNumber.value = 2;
+                        try{
+                          movieController.movieRuntime.value = 0;
+                          movieController.movieRuntime.value = await _tmdbService.fetchRuntime(movie['id']);
+                          if(movieController.movieRuntime.value == 0){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(AppLocalizations.of(context)!.errorMessage),
+                                duration: const Duration(seconds: 5),
+                              ),
+                            );
+                            return;
+                          }
+                          movieController.selectedMovie.add(movie);
+                          addPageController.pageNumber.value = 2;
+                        } catch(e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(AppLocalizations.of(context)!.errorMessage),
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                        }
                       }
                     },
                     child: Container(
