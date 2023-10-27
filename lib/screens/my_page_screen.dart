@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:moviebim/api_key.dart';
+import 'package:moviebim/services/admob_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/basic_controller.dart';
 import '../controllers/login_controller.dart';
+import '../main.dart';
 import '../models/movie_model.dart';
 import '../services/google_service.dart';
 import '../utilities/db_helper.dart';
@@ -30,11 +34,30 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BannerAd banner = BannerAd(
+      listener: BannerAdListener(
+        onAdLoaded: (_) {},
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {},
+      ),
+      size: AdSize.banner,
+      adUnitId: useRealAdId ? realBannerAdId : testBannerAdId,
+      request: const AdRequest(),
+    )..load();
+
     final deviceWidth = MediaQuery.of(context).size.width;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 50,
+            child: AdWidget(
+              ad: banner,
+            ),
+          ),
+          const SizedBox(
+            height: 50,
+          ),
           StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
@@ -110,6 +133,8 @@ class MyPageScreen extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: (){
+                callInterstitialAd();
+                loadInterstitialAd();
                 _saveThemeStatus(!Get.isDarkMode);
                 Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,);
               },

@@ -42,6 +42,7 @@ ThemeData _darkTheme = ThemeData(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Firebase.initializeApp();
   _prefs = await SharedPreferences.getInstance();
   runApp(MyApp());

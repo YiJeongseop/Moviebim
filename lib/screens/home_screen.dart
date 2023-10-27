@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moviebim/services/admob_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    loadInterstitialAd();
     _getRuntime();
     _widgetOptions.add(CalendarScreen(basicController: basicController));
     _widgetOptions.add(ListScreen(basicController: basicController));
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: isLoading
+        appBar: isLoading || _selectedIndex == 2
             ? null
             : AppBar(
                 automaticallyImplyLeading: false,
