@@ -152,6 +152,7 @@ class ListScreen extends StatelessWidget {
                       )
                     ],
                   ),
+                  const SizedBox(height: 4),
                 ],
               );
             }),

@@ -16,7 +16,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [drive.DriveApi.driveFileScope, drive.DriveApi.driveAppdataScope]
 );
 
-Future<bool> signInWithGoogle(BuildContext context) async {
+Future<void> signInWithGoogle(BuildContext context) async {
   Get.dialog(const LoadingOverlay(), barrierDismissible: false);
   GoogleSignInAccount? googleUser;
 
@@ -25,15 +25,14 @@ Future<bool> signInWithGoogle(BuildContext context) async {
   } catch (e) {
     Get.back();
     Get.back();
-    Get.back();
     showSnackbar(context, AppLocalizations.of(context)!.failed);
-    return false;
+    return;
   }
 
   if(googleUser == null){
     Get.back();
     showSnackbar(context, AppLocalizations.of(context)!.failed);
-    return false;
+    return;
   }
 
   try{
@@ -48,12 +47,11 @@ Future<bool> signInWithGoogle(BuildContext context) async {
 
     Get.back();
     Get.back();
-    Get.back();
-    return true;
+    return;
   } catch (e) {
     Get.back();
     showSnackbar(context, AppLocalizations.of(context)!.failed);
-    return false;
+    return;
   }
 }
 
@@ -64,7 +62,6 @@ void showSnackbar(BuildContext context, String text){
           text,
           textAlign: TextAlign.center,
         ),
-        showCloseIcon: true,
         closeIconColor: Get.isDarkMode ? Colors.black : Colors.white,
         duration: const Duration(seconds: 5),
       )

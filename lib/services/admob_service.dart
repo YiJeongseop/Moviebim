@@ -8,7 +8,7 @@ InterstitialAd? _interstitialAd;
 void loadInterstitialAd() {
   InterstitialAd.load(
     adUnitId: useRealAdId ? realInterstitialAdId : testInterstitialAdId,
-    request: status == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
+    request: consentStatus == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
     adLoadCallback: InterstitialAdLoadCallback(
       onAdLoaded: (InterstitialAd ad) => _interstitialAd = ad,
       onAdFailedToLoad: (LoadAdError error) {},

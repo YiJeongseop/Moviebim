@@ -41,7 +41,7 @@ class MyPageScreen extends StatelessWidget {
       ),
       size: AdSize.banner,
       adUnitId: useRealAdId ? realBannerAdId : testBannerAdId,
-      request: status == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
+      request: consentStatus == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
     )..load();
 
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -133,8 +133,10 @@ class MyPageScreen extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: (){
-                callInterstitialAd();
-                loadInterstitialAd();
+                if(!onDebug){
+                  callInterstitialAd();
+                  loadInterstitialAd();
+                }
                 _saveThemeStatus(!Get.isDarkMode);
                 Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,);
               },

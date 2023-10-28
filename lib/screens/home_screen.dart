@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moviebim/services/admob_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -139,18 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 void deleteListStar(MovieModel movieModel, BasicController basicController) {
-  Map<double, int> temp = {
-    5: 0,
-    4.5: 1,
-    4: 2,
-    3.5: 3,
-    3: 4,
-    2.5: 5,
-    2: 6,
-    1.5: 7,
-    1: 8,
-    0.5: 9
-  };
+  Map<double, int> temp = {5: 0, 4.5: 1, 4: 2, 3.5: 3, 3: 4, 2.5: 5, 2: 6, 1.5: 7, 1: 8, 0.5: 9};
   int index = temp[movieModel.rating]!;
   int j = 0;
   for (MovieModel i in basicController.savedMoviesStar[index][movieModel.rating]) {

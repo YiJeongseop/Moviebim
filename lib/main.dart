@@ -13,16 +13,17 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../screens/add_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/edit_screen.dart';
-import 'api_key.dart';
 import '../services/admob_service.dart';
+import 'api_key.dart';
 
 late final SharedPreferences _prefs;
 final String defaultLocale = Platform.localeName;
-bool englishTest = false;
-bool httpResponseTest = false;
+bool englishTest = false; // true - locale en
+bool httpResponseTest = false; // true - Failed to search movies
 bool useRealAdId = false;
-bool consentTest = true;
-var status; // consent status
+bool consentTest = false;
+bool onDebug = true;
+var consentStatus;
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -64,10 +65,10 @@ class MyApp extends StatelessWidget {
     final ConsentRequestParameters params;
     if(!consentTest){
       params = ConsentRequestParameters();
-    } else {
+    } else { // Test
       ConsentDebugSettings debugSettings = ConsentDebugSettings(
           debugGeography: DebugGeography.debugGeographyEea,
-          testIdentifiers: [testId1, testId2]); // for Test
+          testIdentifiers: [testId1, testId2]);
       params = ConsentRequestParameters(consentDebugSettings: debugSettings);
     }
 
@@ -82,8 +83,8 @@ class MyApp extends StatelessWidget {
 
   void loadForm() {
     ConsentForm.loadConsentForm((ConsentForm consentForm) async {
-        status = await ConsentInformation.instance.getConsentStatus();
-        if (status == ConsentStatus.required) {
+      consentStatus = await ConsentInformation.instance.getConsentStatus();
+        if (consentStatus == ConsentStatus.required) {
           consentForm.show((formError) {});
         }
       }, (formError) {});
@@ -91,7 +92,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 가로 회전 막기
     return GetMaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,

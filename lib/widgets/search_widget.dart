@@ -8,7 +8,10 @@ import '../controllers/text_controller.dart';
 import '../services/tmdb_service.dart';
 
 class SearchWidget extends StatelessWidget {
-  SearchWidget({Key? key, required this.movieController, required this.textController, required this.addPageController, required this.textFocus}) : super(key: key);
+  SearchWidget({Key? key,
+    required this.movieController, required this.textController,
+    required this.addPageController, required this.textFocus})
+      : super(key: key);
 
   final TmdbService _tmdbService = TmdbService();
   final MovieController movieController;
@@ -71,13 +74,10 @@ class SearchWidget extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: Icon(
-                  Icons.search,
-                  color: Get.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.grey,
-                  size: deviceWidth / 15,
-                ),
+              Icon(
+                Icons.search,
+                color: Get.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.grey,
+                size: deviceWidth / 15,
               ),
             ],
           ),
@@ -149,9 +149,9 @@ class SearchWidget extends StatelessWidget {
                                 height: (deviceWidth / 2.5) * 1.5,
                                 width: deviceWidth / 2.5,
                                 child: Icon(
-                                  Icons.close,
+                                  Icons.image_not_supported_outlined,
                                   color: Get.isDarkMode ? Colors.white54 : Colors.black54,
-                                  size: deviceWidth * 0.3,
+                                  size: deviceWidth * 0.25,
                                 ),
                               );
                             },
