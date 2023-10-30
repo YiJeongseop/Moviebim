@@ -59,9 +59,10 @@ class _EditScreenState extends State<EditScreen> {
           textFocus.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
           appBar: AppBar(
             automaticallyImplyLeading: false,
+            backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
             leading: IconButton(
               onPressed: () {
                 Get.back();
@@ -115,9 +116,10 @@ class _EditScreenState extends State<EditScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Get.isDarkMode ? Colors.white54: Colors.black12,
+                        color: Get.isDarkMode ? Colors.black.withOpacity(0.3): Colors.grey.withOpacity(0.5),
                         width: 2,
                       ),
+                      color: Get.isDarkMode ? Colors.black.withOpacity(0.2) : Colors.white,
                     ),
                     padding: const EdgeInsets.all(3.0),
                     child: Image.network(
@@ -129,7 +131,7 @@ class _EditScreenState extends State<EditScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12),
+                Divider(color: Theme.of(context).dividerColor, thickness: 1.1),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: RatingBar.builder(
@@ -148,25 +150,36 @@ class _EditScreenState extends State<EditScreen> {
                     },
                   ),
                 ),
-                Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12),
+                Divider(color: Theme.of(context).dividerColor, thickness: 1.1),
                 const SizedBox(height: 10),
-                TextField(
-                  controller: textEditingController,
-                  maxLines: null,
-                  focusNode: textFocus,
-                  textAlign: TextAlign.start,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.leaveAComment,
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.only(top: 5, left: 24, right: 10),
+                Container(
+                  width: deviceWidth * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.27,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                      color: Colors.black.withOpacity(0.4),
+                    ),
+                    color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
                   ),
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontSize: deviceWidth * 0.05
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: null,
+                    focusNode: textFocus,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.leaveAComment,
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                    ),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
+                      fontSize: deviceWidth * 0.045
+                    ),
+                    onChanged: (value) => textController.updateComment(value),
+                    textInputAction: TextInputAction.go,
                   ),
-                  onChanged: (value) => textController.updateComment(value),
-                  textInputAction: TextInputAction.go,
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               ],

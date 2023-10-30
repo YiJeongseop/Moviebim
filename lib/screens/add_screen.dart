@@ -49,8 +49,9 @@ class _AddScreenState extends State<AddScreen> {
           textFocus.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
           appBar: AppBar(
+            backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
             automaticallyImplyLeading: false,
             leading: Obx(
               () => addPageController.pageNumber.value == 2
@@ -97,6 +98,15 @@ class _AddScreenState extends State<AddScreen> {
                             for(int i = 0; i < basicController.savedMovies.length; i++){
                               if(basicController.savedMovies[i].containsKey(basicController.selectedDate.value)){
                                 basicController.savedMovies[i][basicController.selectedDate.value].add(movieModel);
+
+                                // 밑 코드는 Obx에게 savedMovies의 값이 변했음을 알려준다.
+                                basicController.savedMovies.add(
+                                  {
+                                    DateTime(2023, 9, 30): [movieModel]
+                                  }
+                                );
+                                basicController.savedMovies.removeAt(basicController.savedMovies.length - 1);
+
                                 break;
                               }
                             }

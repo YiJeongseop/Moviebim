@@ -57,107 +57,118 @@ class ListScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
+        Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
         Expanded(
           child: ListView.separated(
             itemCount: length,
             itemBuilder: (BuildContext context, int index) => Obx(() {
               return Column(
                 children: [
+                  if(index == 0)
+                    const SizedBox(height: 5),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 20),
-                        child: Image.network(
-                          listController.sortedByStar.value
-                              ? listSortedByStar[index].posterPath
-                              : listSortedByDate[index].posterPath,
-                          height: (deviceWidth / 4) * 1.5,
-                          width: deviceWidth / 4,
-                          fit: BoxFit.fill,
-                          errorBuilder: (context, object, stackTrace) {
-                            return SizedBox(
-                              height: (deviceWidth / 4) * 1.5,
-                              width: deviceWidth / 4,
-                              child: Icon(
-                                Icons.close,
-                                color: Get.isDarkMode
-                                    ? Colors.white54
-                                    : Colors.black54,
-                                size: deviceWidth * 0.2,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: (deviceWidth / 4) * 2.35,
-                              child: Text(
-                                listController.sortedByStar.value
-                                    ? listSortedByStar[index].title
-                                    : listSortedByDate[index].title,
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontSize: deviceWidth * 0.04,
-                                    color: Theme.of(context).primaryColorDark,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            listController.sortedByStar.value
+                                ? listSortedByStar[index].posterPath
+                                : listSortedByDate[index].posterPath,
+                            height: (deviceWidth / 4) * 1.5,
+                            width: deviceWidth / 4,
+                            fit: BoxFit.fill,
+                            errorBuilder: (context, object, stackTrace) {
+                              return SizedBox(
+                                height: (deviceWidth / 4) * 1.5,
+                                width: deviceWidth / 4,
+                                child: Icon(
+                                  Icons.image_not_supported_outlined,
+                                  color: Get.isDarkMode
+                                      ? Colors.white54
+                                      : Colors.black54,
+                                  size: deviceWidth * 0.2,
                                 ),
+                              );
+                            },
+                          ),
+                          StarWidget(
+                            rating: listController.sortedByStar.value
+                                ? listSortedByStar[index].rating
+                                : listSortedByDate[index].rating,
+                            denominator: 4,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            height: (deviceWidth / 4) * 1.5,
+                            decoration: BoxDecoration(
+                                color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(0.4),
+                                )
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: (deviceWidth / 4) * 2.35,
+                                    child: Text(
+                                      listController.sortedByStar.value
+                                          ? listSortedByStar[index].title
+                                          : listSortedByDate[index].title,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        fontSize: deviceWidth * 0.04,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  SizedBox(
+                                    width: (deviceWidth / 4) * 2.35,
+                                    child: Text(
+                                      listController.sortedByStar.value
+                                          ? listSortedByStar[index].comment
+                                          : listSortedByDate[index].comment,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        fontSize: deviceWidth * 0.035,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              width: (deviceWidth / 4) * 2.35,
-                              child: Text(
-                                listController.sortedByStar.value
-                                    ? listSortedByStar[index].comment
-                                    : listSortedByDate[index].comment,
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontSize: deviceWidth * 0.035,
-                                    color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      StarWidget(
-                        rating: listController.sortedByStar.value
-                            ? listSortedByStar[index].rating
-                            : listSortedByDate[index].rating,
-                        denominator: 4,
-                      ),
-                      Expanded(child: Container()),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10, top: 5),
-                        child: Text(
-                          listController.sortedByStar.value
-                              ? listSortedByStar[index].dateTime.toString().split(' ')[0]
-                              : listSortedByDate[index].dateTime.toString().split(' ')[0],
-                          style: TextStyle(
+                          ),
+                          Text(
+                            listController.sortedByStar.value
+                                ? listSortedByStar[index].dateTime.toString().split(' ')[0]
+                                : listSortedByDate[index].dateTime.toString().split(' ')[0],
+                            style: TextStyle(
                               fontSize: deviceWidth * 0.04,
                               color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
-                        ),
+                        ],
                       )
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  if(length == index + 1)
+                    const SizedBox(height: 20),
                 ],
               );
             }),
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12);
+              return Divider(color: Theme.of(context).dividerColor, thickness: 1.1);
             },
           ),
         ),

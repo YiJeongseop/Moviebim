@@ -62,6 +62,7 @@ void showSnackbar(BuildContext context, String text){
           text,
           textAlign: TextAlign.center,
         ),
+        showCloseIcon: true,
         closeIconColor: Get.isDarkMode ? Colors.black : Colors.white,
         duration: const Duration(seconds: 5),
       )

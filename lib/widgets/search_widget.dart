@@ -32,6 +32,7 @@ class SearchWidget extends StatelessWidget {
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(4.0),
+            color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
           ),
           margin: const EdgeInsets.only(left: 15, right: 15),
           child: Row(
@@ -60,6 +61,8 @@ class SearchWidget extends StatelessWidget {
                           SnackBar(
                             content: Text(AppLocalizations.of(context)!.noResult),
                             duration: const Duration(seconds: 5),
+                            showCloseIcon: true,
+                            closeIconColor: Theme.of(context).primaryColor,
                           ),
                         );
                       }
@@ -68,6 +71,8 @@ class SearchWidget extends StatelessWidget {
                         SnackBar(
                           content: Text(AppLocalizations.of(context)!.errorMessage),
                           duration: const Duration(seconds: 5),
+                          showCloseIcon: true,
+                          closeIconColor: Theme.of(context).primaryColor,
                         ),
                       );
                     }
@@ -83,7 +88,7 @@ class SearchWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12),
+        Divider(color: Theme.of(context).dividerColor),
         Expanded(
           child: Obx(
             () => GridView.builder(
@@ -99,8 +104,8 @@ class SearchWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final movie = movieController.movies[index];
                 return Card(
-                  color: Get.isDarkMode ? Colors.grey.withOpacity(0.47): Colors.white.withOpacity(0.95),
-                  elevation: 2,
+                  color: Get.isDarkMode ? Colors.grey.withOpacity(0.28): Colors.white.withOpacity(0.95),
+                  elevation: 2.5,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
@@ -114,6 +119,8 @@ class SearchWidget extends StatelessWidget {
                               SnackBar(
                                 content: Text(AppLocalizations.of(context)!.errorMessage),
                                 duration: const Duration(seconds: 5),
+                                showCloseIcon: true,
+                                closeIconColor: Theme.of(context).primaryColor,
                               ),
                             );
                             return;
@@ -125,6 +132,8 @@ class SearchWidget extends StatelessWidget {
                             SnackBar(
                               content: Text(AppLocalizations.of(context)!.errorMessage),
                               duration: const Duration(seconds: 5),
+                              showCloseIcon: true,
+                              closeIconColor: Theme.of(context).primaryColor,
                             ),
                           );
                         }

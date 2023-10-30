@@ -16,14 +16,14 @@ import '../screens/edit_screen.dart';
 import '../services/admob_service.dart';
 import 'api_key.dart';
 
-late final SharedPreferences _prefs;
+late final SharedPreferences prefs;
 final String defaultLocale = Platform.localeName;
-bool englishTest = false; // true - locale en
-bool httpResponseTest = false; // true - Failed to search movies
+var consentStatus;
+bool englishTest = false;
+bool httpResponseTest = false;
 bool useRealAdId = false;
 bool consentTest = false;
 bool onDebug = true;
-var consentStatus;
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -33,6 +33,7 @@ ThemeData _lightTheme = ThemeData(
   ),
   primaryColor: Colors.white,
   primaryColorDark: Colors.black,
+  dividerColor: Colors.grey.withOpacity(0.5),
 );
 
 ThemeData _darkTheme = ThemeData(
@@ -43,19 +44,20 @@ ThemeData _darkTheme = ThemeData(
   ),
   primaryColor: Colors.black,
   primaryColorDark: Colors.white,
+  dividerColor: Colors.black.withOpacity(0.4),
 );
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
-  _prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   _getThemeStatus() async {
-    final isDarkTheme = _prefs.getBool('theme') ?? false;
+    final isDarkTheme = prefs.getBool('theme') ?? false;
     Get.changeThemeMode(isDarkTheme ? ThemeMode.dark : ThemeMode.light);
   }
 

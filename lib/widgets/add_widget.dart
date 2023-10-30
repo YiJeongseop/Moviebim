@@ -29,9 +29,10 @@ class AddWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Get.isDarkMode ? Colors.white54: Colors.black12,
+                  color: Get.isDarkMode ? Colors.black.withOpacity(0.3) : Colors.grey.withOpacity(0.5),
                   width: 2,
                 ),
+                color: Get.isDarkMode ? Colors.black.withOpacity(0.2) : Colors.white,
               ),
               padding: const EdgeInsets.all(3.0),
               child: Image.network(
@@ -43,7 +44,7 @@ class AddWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12),
+          Divider(color: Theme.of(context).dividerColor, thickness: 1.1),
           Padding(
             padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
             child: RatingBar.builder(
@@ -62,24 +63,35 @@ class AddWidget extends StatelessWidget {
               },
             ),
           ),
-          Divider(color: Get.isDarkMode ? Colors.white70 : Colors.black12),
+          Divider(color: Theme.of(context).dividerColor, thickness: 1.1),
           const SizedBox(height: 10),
-          TextField(
-            maxLines: null,
-            focusNode: textFocus,
-            textAlign: TextAlign.start,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.leaveAComment,
-              border: InputBorder.none,
-              isDense: true,
-              contentPadding: const EdgeInsets.only(top: 5, left: 24, right: 10),
+          Container(
+            width: deviceWidth * 0.8,
+            height: MediaQuery.of(context).size.height * 0.27,
+            decoration: BoxDecoration(
+              color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Colors.black.withOpacity(0.4),
+              )
             ),
-            style: TextStyle(
-              color: Theme.of(context).primaryColorDark,
-              fontSize: deviceWidth * 0.05
+            child: TextField(
+              maxLines: null,
+              focusNode: textFocus,
+              textAlign: TextAlign.start,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.leaveAComment,
+                border: InputBorder.none,
+                isDense: true,
+                contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+              ),
+              style: TextStyle(
+                color: Theme.of(context).primaryColorDark,
+                fontSize: deviceWidth * 0.045
+              ),
+              onChanged: (value) => textController.updateComment(value),
+              textInputAction: TextInputAction.go,
             ),
-            onChanged: (value) => textController.updateComment(value),
-            textInputAction: TextInputAction.go,
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.1),
         ],

@@ -9,8 +9,7 @@ class StarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double value = MediaQuery.of(context).size.width / denominator;
-    return Container(
-      margin: const EdgeInsets.only(left: 10, top: 5),
+    return SizedBox(
       width: value,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

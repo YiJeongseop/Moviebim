@@ -14,5 +14,12 @@
   "viewByDate" : "날짜 별로 보기",
   "viewAll" : "전체 보기",
   "myPage" : "마이페이지",
-  "changeTheme" : "테마 변경"
+  "changeTheme" : "테마 변경",
+  "credits" : "크레딧",
+  "pleaseLogin" : "로그인하셔야 구글 드라이브를 사용하실 수 있어요.",
+  "ok" : "확인",
+  "cancel" : "취소",
+  "wantToSave" : "정말 저장하시겠습니까?",
+  "wantToLoad" : "정말 불러오시겠습니까?",
+  "tmdb" : "이 제품은 TMDb API를 사용하지만 TMDb에서 승인하거나 인증받지 않았습니다."
 }

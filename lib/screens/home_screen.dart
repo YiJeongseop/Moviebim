@@ -77,10 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
         appBar: isLoading || _selectedIndex == 2
             ? null
             : AppBar(
+                backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
                 automaticallyImplyLeading: false,
                 actions: [
                   if(_selectedIndex == 0)
@@ -131,6 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
+                selectedItemColor: Get.isDarkMode ? Colors.teal[300] : Colors.teal[300],
+                backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[50],
               ),
       ),
     );

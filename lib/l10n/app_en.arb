@@ -14,5 +14,12 @@
   "viewByDate" : "View by Date",
   "viewAll" : "View All",
   "myPage" : "My Page",
-  "changeTheme" : "Change Theme"
+  "changeTheme" : "Change Theme",
+  "credits" : "Credits",
+  "pleaseLogin" : "Please login.",
+  "ok" : "OK",
+  "cancel" : "Cancel",
+  "wantToSave" : "Do you want to continue?",
+  "wantToLoad" : "Do you want to continue?",
+  "tmdb" : "This product uses the TMDb API but is not endorsed or certified by TMDb."
 }
