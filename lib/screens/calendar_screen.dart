@@ -49,12 +49,12 @@ class CalendarScreen extends StatelessWidget {
           lastDate: DateTime(2028, 10, 1),
           onDateSelected: (date) => basicController.selectedDate.value = DateTime(date.year, date.month, date.day),
           leftMargin: 10,
-          monthColor: Get.isDarkMode ? Colors.white : Colors.black,
-          dayColor: Get.isDarkMode ? Colors.teal[300] : Colors.teal[300],
-          dayNameColor: Colors.black54,
-          activeDayColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.white,
-          activeBackgroundDayColor: Colors.red[300],
-          dotsColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+          monthColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+          dayColor: Get.isDarkMode ? Colors.grey[400] : Colors.black.withOpacity(0.5),
+          dayNameColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          activeDayColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          activeBackgroundDayColor: Colors.teal[300],
+          dotsColor: Colors.teal[300], //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
           locale: englishTest ? 'en' : ((defaultLocale == 'ko_KR') ? 'ko' : 'en'),
         ),
         const SizedBox(height: 4),
@@ -88,7 +88,7 @@ class CalendarScreen extends StatelessWidget {
                                 width: deviceWidth / 3,
                                 child: Icon(
                                   Icons.image_not_supported_outlined,
-                                  color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                                  color: Get.isDarkMode ? Colors.white12 : Colors.grey.withOpacity(0.5),
                                   size: deviceWidth * 0.25,
                                 ),
                               );
@@ -108,10 +108,10 @@ class CalendarScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10),
                             height: (deviceWidth / 3) * 1.5,
                             decoration: BoxDecoration(
-                                color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
+                                color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
-                                  color: Colors.black.withOpacity(0.4),
+                                  color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
                                 )
                             ),
                             child: SingleChildScrollView(
@@ -124,7 +124,7 @@ class CalendarScreen extends StatelessWidget {
                                     child: Text(
                                       basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
                                       softWrap: true,
-                                      style: TextStyle(fontSize: deviceWidth * 0.04, color: Theme.of(context).primaryColorDark),
+                                      style: TextStyle(fontSize: deviceWidth * 0.045, color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9)),
                                     ),
                                   ),
                                   const SizedBox(height: 7),
@@ -134,7 +134,7 @@ class CalendarScreen extends StatelessWidget {
                                     child: Text(
                                       basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
                                       softWrap: true,
-                                      style: TextStyle(fontSize: deviceWidth * 0.035, color: Theme.of(context).primaryColorDark),
+                                      style: TextStyle(fontSize: deviceWidth * 0.04, color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9)),
                                     ),
                                   ),
                                 ],
@@ -148,14 +148,14 @@ class CalendarScreen extends StatelessWidget {
                               Container(
                                 margin: const EdgeInsets.only(right: 10),
                                 child: InkWell(
-                                  child: Icon(Icons.edit, color: Get.isDarkMode ? const Color(0xFFDDDDDD).withOpacity(0.55) : Colors.black54),
+                                  child: Icon(Icons.edit, color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9)),
                                   onTap: () {
                                     Get.toNamed('/edit', arguments: [basicController, listIndex, index]);
                                   },
                                 ),
                               ),
                               InkWell(
-                                child: Icon(Icons.delete_forever_outlined, color: Get.isDarkMode ? const Color(0xFFDDDDDD).withOpacity(0.55) : Colors.black54),
+                                child: Icon(Icons.delete_forever_outlined, color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9)),
                                 onTap: () {
                                   final movieModel = MovieModel(
                                     title: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
@@ -192,7 +192,7 @@ class CalendarScreen extends StatelessWidget {
               );
             },
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(color: Get.isDarkMode ? Colors.black.withOpacity(0.4) : Colors.grey.withOpacity(0.5), thickness: 1.1);
+              return Divider(color: Theme.of(context).dividerColor, thickness: 1.1);
             },
           )),
         ),

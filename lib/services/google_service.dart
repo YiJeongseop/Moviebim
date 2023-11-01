@@ -61,9 +61,13 @@ void showSnackbar(BuildContext context, String text){
         content: Text(
           text,
           textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          ),
         ),
         showCloseIcon: true,
-        closeIconColor: Get.isDarkMode ? Colors.black : Colors.white,
+        closeIconColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+        backgroundColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
         duration: const Duration(seconds: 5),
       )
   );

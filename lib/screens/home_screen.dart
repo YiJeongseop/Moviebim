@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:moviebim/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -77,11 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+        backgroundColor: Theme.of(context).primaryColorLight, //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
         appBar: isLoading || _selectedIndex == 2
             ? null
             : AppBar(
-                backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+                backgroundColor: Theme.of(context).primaryColorLight, //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
                 automaticallyImplyLeading: false,
                 actions: [
                   if(_selectedIndex == 0)
@@ -91,10 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       icon: Icon(
                         Icons.add,
-                        color: Theme.of(context).primaryColorDark,
-                        size: deviceWidth / 12,
+                        color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                        size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                       ),
-                      splashRadius: deviceWidth / 18,
+                      splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                     ),
                   if(_selectedIndex == 1)
                     Obx(() => IconButton(
@@ -103,16 +105,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         icon: Icon(
                           listController.sortedByStar.value ? Icons.date_range : Icons.star,
-                          color: Theme.of(context).primaryColorDark,
-                          size: deviceWidth / 12,
+                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
-                        splashRadius: deviceWidth / 18,
+                        splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                     )),
                 ],
               ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
-            : _widgetOptions[_selectedIndex],
+            : DefaultTextStyle(
+                style: englishTest ? GoogleFonts.roboto() : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothic() : GoogleFonts.roboto()),
+                child: _widgetOptions[_selectedIndex]
+            ),
         bottomNavigationBar: isLoading
             ? null
             : BottomNavigationBar(
@@ -133,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
                 selectedItemColor: Get.isDarkMode ? Colors.teal[300] : Colors.teal[300],
-                backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[50],
+                unselectedItemColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                backgroundColor: Get.isDarkMode ? Colors.grey[850] : Colors.grey[100],
               ),
       ),
     );

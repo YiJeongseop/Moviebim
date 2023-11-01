@@ -5,12 +5,12 @@ class LinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final linePaint = Paint()
-      ..color = Get.isDarkMode ? const Color(0xFFDDDDDD).withOpacity(0.25) : Colors.black
+      ..color = (Get.isDarkMode ? Colors.grey[700] : Colors.black.withOpacity(0.7))!
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 16.0;
 
     final squarePaint = Paint()
-      ..color = Get.isDarkMode ? const Color(0xFF333333) : Colors.white
+      ..color = (Get.isDarkMode ? Colors.grey[800] : Colors.grey[50])!
       ..style = PaintingStyle.fill;
 
     final lineY = size.height / 2;
@@ -38,7 +38,7 @@ class LinePainter extends CustomPainter {
             Offset(squareX.toDouble(), lineY - squareSize / 2),
             Offset((squareX + squareSize).toDouble(), lineY + squareSize / 2),
           ),
-          const Radius.circular(2),
+          const Radius.circular(2.7),
       );
       canvas.drawRRect(squareRect, squarePaint);
     }

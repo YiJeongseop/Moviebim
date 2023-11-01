@@ -17,6 +17,7 @@ class MyPageScreen extends StatelessWidget {
   MyPageScreen({Key? key, required this.basicController, required this.loginController}) : super(key: key);
   final BasicController basicController;
   final LoginController loginController;
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   _saveThemeStatus(bool value) async {
@@ -66,19 +67,17 @@ class MyPageScreen extends StatelessWidget {
                       loginController.isLogined.value = true;
                     });
                     return Text(
-                      englishTest
-                          ? FirebaseAuth.instance.currentUser!.displayName!
-                          : defaultLocale == 'ko_KR' ? "${FirebaseAuth.instance.currentUser!.displayName!}님," : FirebaseAuth.instance.currentUser!.displayName!,
+                      FirebaseAuth.instance.currentUser!.displayName!,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                        fontSize: deviceWidth * 0.06,
+                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                        fontSize: deviceWidth * 0.063,
                       ),
                       textAlign: TextAlign.center,
                     );
                   } else {
                     return Text(
                       "",
-                      style: TextStyle(fontSize: deviceWidth * 0.06)
+                      style: TextStyle(fontSize: deviceWidth * 0.063)
                     );
                   }
                 },
@@ -87,15 +86,17 @@ class MyPageScreen extends StatelessWidget {
               Icon(
                 Icons.access_time_outlined,
                 size: deviceWidth * 0.15,
-                color: Colors.teal[400]?.withOpacity(0.8),
+                color: Colors.teal[300],
               ),
               Obx(() => Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 20),
                 child: Text(
-                  "${basicController.entireRuntime.value ~/ 60} : ${basicController.entireRuntime.value % 60}",
+                  englishTest
+                      ? "${basicController.entireRuntime.value ~/ 60}h ${basicController.entireRuntime.value % 60}m"
+                      : (defaultLocale == 'ko_KR') ? "${basicController.entireRuntime.value ~/ 60}시간 ${basicController.entireRuntime.value % 60}분" : "${basicController.entireRuntime.value ~/ 60}h ${basicController.entireRuntime.value % 60}m",
                   style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontSize: deviceWidth * 0.055,
+                    color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                    fontSize: deviceWidth * 0.06,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -137,12 +138,12 @@ class MyPageScreen extends StatelessWidget {
                                 Icon(
                                   Icons.logout,
                                   size: deviceWidth * 0.08,
-                                  color: Colors.black54,
+                                  color: Colors.black.withOpacity(0.5),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.logout,
                                   style: TextStyle(
-                                    color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                                    color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                                     fontSize: deviceWidth * 0.052,
                                   ),
                                 ),
@@ -191,12 +192,12 @@ class MyPageScreen extends StatelessWidget {
                                 Icon(
                                   Icons.login,
                                   size: deviceWidth * 0.08,
-                                  color: Colors.black54,
+                                  color: Colors.black.withOpacity(0.5),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.login,
                                   style: TextStyle(
-                                    color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                                    color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                                     fontSize: deviceWidth * 0.048,
                                   ),
                                 ),
@@ -229,12 +230,15 @@ class MyPageScreen extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: (){
-                      if(!onDebug){
-                        callInterstitialAd();
-                        loadInterstitialAd();
+                      try{
+                        if(!onDebug){
+                          callInterstitialAd();
+                          loadInterstitialAd();
+                        }
+                      } finally {
+                        _saveThemeStatus(!Get.isDarkMode);
+                        Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
                       }
-                      _saveThemeStatus(!Get.isDarkMode);
-                      Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
@@ -244,12 +248,12 @@ class MyPageScreen extends StatelessWidget {
                           Icon(
                             Get.isDarkMode ? Icons.light_mode : Icons.dark_mode,
                             size: deviceWidth * 0.08,
-                            color: Colors.black54,
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           Text(
                             AppLocalizations.of(context)!.changeTheme,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.052,
                             ),
                           ),
@@ -303,12 +307,12 @@ class MyPageScreen extends StatelessWidget {
                           Icon(
                             Icons.file_copy_outlined,
                             size: deviceWidth * 0.08,
-                            color: Colors.black54,
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           Text(
                             AppLocalizations.of(context)!.credits,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.052,
                             ),
                           ),
@@ -365,12 +369,12 @@ class MyPageScreen extends StatelessWidget {
                           Icon(
                             Icons.upload,
                             size: deviceWidth * 0.08,
-                            color: Colors.black54,
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           Text(
                             AppLocalizations.of(context)!.save,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.042,
                             ),
                           ),
@@ -428,12 +432,12 @@ class MyPageScreen extends StatelessWidget {
                           Icon(
                             Icons.download,
                             size: deviceWidth * 0.08,
-                            color: Colors.black54,
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           Text(
                             AppLocalizations.of(context)!.load,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Theme.of(context).primaryColorDark,
+                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.042,
                             ),
                           ),

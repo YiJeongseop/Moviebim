@@ -19,11 +19,11 @@ import 'api_key.dart';
 late final SharedPreferences prefs;
 final String defaultLocale = Platform.localeName;
 var consentStatus;
-bool englishTest = false;
-bool httpResponseTest = false;
-bool useRealAdId = false;
-bool consentTest = false;
-bool onDebug = true;
+bool englishTest = false; // false
+bool httpResponseTest = false; // false
+bool useRealAdId = true; // true
+bool consentTest = false; // false
+bool onDebug = false; // false
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -34,6 +34,7 @@ ThemeData _lightTheme = ThemeData(
   primaryColor: Colors.white,
   primaryColorDark: Colors.black,
   dividerColor: Colors.grey.withOpacity(0.5),
+  primaryColorLight: Colors.grey[50],
 );
 
 ThemeData _darkTheme = ThemeData(
@@ -45,6 +46,7 @@ ThemeData _darkTheme = ThemeData(
   primaryColor: Colors.black,
   primaryColorDark: Colors.white,
   dividerColor: Colors.black.withOpacity(0.4),
+  primaryColorLight: Colors.grey[800],
 );
 
 void main() async {

@@ -21,7 +21,7 @@ AlertDialog loginAlertDialog(BuildContext context) {
       },
       child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.03,
+          height: MediaQuery.of(context).size.height * 0.05,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +53,7 @@ AlertDialog loginAlertDialog(BuildContext context) {
 
 AlertDialog tmdbAlertDialog(BuildContext context) {
   return AlertDialog(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.grey[50],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     content: SizedBox(
       height: MediaQuery.of(context).size.height * 0.25,
@@ -74,6 +74,7 @@ AlertDialog tmdbAlertDialog(BuildContext context) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.044,
+                  color: Colors.black.withOpacity(0.9),
                 ),
               ),
             ],
@@ -86,7 +87,7 @@ AlertDialog tmdbAlertDialog(BuildContext context) {
 
 AlertDialog okCancelDialog(BuildContext context, String text, BasicController basicController, bool isUpload) {
   return AlertDialog(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.grey[50],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     content: Text(
       text
@@ -107,9 +108,13 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
 
             await uploadToDrive(movies, context);
 
-            if(!onDebug){
-              callInterstitialAd();
-              loadInterstitialAd();
+            try {
+              if(!onDebug){
+                callInterstitialAd();
+                loadInterstitialAd();
+              }
+            } catch (e) {
+              print(e);
             }
           } else {
             List<dynamic>? result = await downloadFromDrive(context);
@@ -130,9 +135,13 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
               prefs.setInt('runtime', temp);
               basicController.entireRuntime.value = temp;
 
-              if(!onDebug){
-                callInterstitialAd();
-                loadInterstitialAd();
+              try {
+                if(!onDebug){
+                  callInterstitialAd();
+                  loadInterstitialAd();
+                }
+              } catch (e) {
+                print(e);
               }
             }
           }
@@ -141,8 +150,8 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
         },
         child: Text(
           AppLocalizations.of(context)!.ok,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.9),
           ),
         ),
       ),
@@ -155,8 +164,8 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
         },
         child: Text(
           AppLocalizations.of(context)!.cancel,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.9),
           ),
         ),
       ),

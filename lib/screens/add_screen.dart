@@ -49,9 +49,9 @@ class _AddScreenState extends State<AddScreen> {
           textFocus.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+          backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
           appBar: AppBar(
-            backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+            backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
             automaticallyImplyLeading: false,
             leading: Obx(
               () => addPageController.pageNumber.value == 2
@@ -62,10 +62,10 @@ class _AddScreenState extends State<AddScreen> {
                       },
                       icon: Icon(
                         Icons.arrow_back,
-                        color: Get.isDarkMode ? Colors.white : Colors.black,
-                        size: deviceWidth / 12,
+                        color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                        size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                       ),
-                      splashRadius: deviceWidth / 18,
+                      splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                     )
                   : const SizedBox.shrink(),
             ),
@@ -78,10 +78,10 @@ class _AddScreenState extends State<AddScreen> {
                         },
                         icon: Icon(
                           Icons.close,
-                          color: Get.isDarkMode ? Colors.white : Colors.black,
-                          size: deviceWidth / 12,
+                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
-                        splashRadius: deviceWidth / 18,
+                        splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                       )
                     : IconButton(
                         onPressed: () {
@@ -157,10 +157,10 @@ class _AddScreenState extends State<AddScreen> {
                         },
                         icon: Icon(
                           Icons.check,
-                          color: Get.isDarkMode ? Colors.white : Colors.black,
-                          size: deviceWidth / 12,
+                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
-                        splashRadius: deviceWidth / 18,
+                        splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                       ),
               ),
             ],

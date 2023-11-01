@@ -59,20 +59,20 @@ class _EditScreenState extends State<EditScreen> {
           textFocus.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+          backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Get.isDarkMode ? const Color(0xFF333333) : Colors.grey[100],
+            backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
             leading: IconButton(
               onPressed: () {
                 Get.back();
               },
               icon: Icon(
                 Icons.arrow_back,
-                color: Get.isDarkMode ? Colors.white : Colors.black,
-                size: deviceWidth / 12,
+                color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
               ),
-              splashRadius: deviceWidth / 18,
+              splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
             ),
             actions: [
               IconButton(
@@ -99,10 +99,10 @@ class _EditScreenState extends State<EditScreen> {
                 },
                 icon: Icon(
                   Icons.check,
-                  color: Get.isDarkMode ? Colors.white : Colors.black,
-                  size: deviceWidth / 12,
+                  color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                  size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                 ),
-                splashRadius: deviceWidth / 18,
+                splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
               ),
             ],
           ),
@@ -116,10 +116,10 @@ class _EditScreenState extends State<EditScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Get.isDarkMode ? Colors.black.withOpacity(0.3): Colors.grey.withOpacity(0.5),
+                        color: Get.isDarkMode ? Colors.black.withOpacity(0.5): Colors.grey.withOpacity(0.5),
                         width: 2,
                       ),
-                      color: Get.isDarkMode ? Colors.black.withOpacity(0.2) : Colors.white,
+                      color: Get.isDarkMode ? Colors.black.withOpacity(0.2) : Colors.grey[50],
                     ),
                     padding: const EdgeInsets.all(3.0),
                     child: Image.network(
@@ -158,9 +158,9 @@ class _EditScreenState extends State<EditScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                      color: Colors.black.withOpacity(0.4),
+                      color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
                     ),
-                    color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
+                    color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
                   ),
                   child: TextField(
                     controller: textEditingController,
@@ -174,7 +174,7 @@ class _EditScreenState extends State<EditScreen> {
                       contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                     ),
                     style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
+                      color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
                       fontSize: deviceWidth * 0.045
                     ),
                     onChanged: (value) => textController.updateComment(value),

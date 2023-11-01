@@ -28,11 +28,11 @@ class SearchWidget extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Get.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.grey.withOpacity(0.5),
+              color: Get.isDarkMode ? Colors.black.withOpacity(0.5) : Colors.grey.withOpacity(0.5),
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(4.0),
-            color: Get.isDarkMode ? Colors.black.withOpacity(0.22) : Colors.white,
+            color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
           ),
           margin: const EdgeInsets.only(left: 15, right: 15),
           child: Row(
@@ -48,7 +48,7 @@ class SearchWidget extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(8),
                   ),
                   style: TextStyle(
-                    color: Theme.of(context).primaryColorDark
+                    color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
                   ),
                   onChanged: (value) => textController.updateTitle(value),
                   textInputAction: TextInputAction.go,
@@ -59,20 +59,28 @@ class SearchWidget extends StatelessWidget {
                       if(movieController.movies.isEmpty){
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(AppLocalizations.of(context)!.noResult),
+                            content: Text(
+                              AppLocalizations.of(context)!.noResult,
+                              style: TextStyle(color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50]),
+                            ),
                             duration: const Duration(seconds: 5),
                             showCloseIcon: true,
-                            closeIconColor: Theme.of(context).primaryColor,
+                            closeIconColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+                            backgroundColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
                           ),
                         );
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errorMessage),
+                          content: Text(
+                            AppLocalizations.of(context)!.errorMessage,
+                            style: TextStyle(color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50]),
+                          ),
                           duration: const Duration(seconds: 5),
                           showCloseIcon: true,
-                          closeIconColor: Theme.of(context).primaryColor,
+                          closeIconColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+                          backgroundColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
                         ),
                       );
                     }
@@ -81,7 +89,7 @@ class SearchWidget extends StatelessWidget {
               ),
               Icon(
                 Icons.search,
-                color: Get.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.grey,
+                color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
                 size: deviceWidth / 15,
               ),
             ],
@@ -104,7 +112,7 @@ class SearchWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final movie = movieController.movies[index];
                 return Card(
-                  color: Get.isDarkMode ? Colors.grey.withOpacity(0.28): Colors.white.withOpacity(0.95),
+                  color: Get.isDarkMode ? Colors.black.withOpacity(0.04) : Colors.white,
                   elevation: 2.5,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
@@ -117,10 +125,14 @@ class SearchWidget extends StatelessWidget {
                           if(movieController.movieRuntime.value == 0){
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(AppLocalizations.of(context)!.errorMessage),
+                                content: Text(
+                                  AppLocalizations.of(context)!.errorMessage,
+                                  style: TextStyle(color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50]),
+                                ),
                                 duration: const Duration(seconds: 5),
                                 showCloseIcon: true,
-                                closeIconColor: Theme.of(context).primaryColor,
+                                closeIconColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+                                backgroundColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
                               ),
                             );
                             return;
@@ -130,10 +142,14 @@ class SearchWidget extends StatelessWidget {
                         } catch(e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.of(context)!.errorMessage),
+                              content: Text(
+                                AppLocalizations.of(context)!.errorMessage,
+                                style: TextStyle(color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50]),
+                              ),
                               duration: const Duration(seconds: 5),
                               showCloseIcon: true,
-                              closeIconColor: Theme.of(context).primaryColor,
+                              closeIconColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+                              backgroundColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
                             ),
                           );
                         }
@@ -159,7 +175,7 @@ class SearchWidget extends StatelessWidget {
                                 width: deviceWidth / 2.5,
                                 child: Icon(
                                   Icons.image_not_supported_outlined,
-                                  color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+                                  color: Get.isDarkMode ? Colors.white12 : Colors.grey.withOpacity(0.5),
                                   size: deviceWidth * 0.25,
                                 ),
                               );
@@ -172,7 +188,7 @@ class SearchWidget extends StatelessWidget {
                                   padding: const EdgeInsets.only(left: 5, right: 5),
                                   child: Text(
                                     movie['title'],
-                                    style: TextStyle(color: Theme.of(context).primaryColorDark),
+                                    style: TextStyle(color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black),
                                   ),
                                 ),
                               ),
