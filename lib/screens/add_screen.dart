@@ -49,9 +49,8 @@ class _AddScreenState extends State<AddScreen> {
           textFocus.unfocus();
         },
         child: Scaffold(
-          backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
-            backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
             automaticallyImplyLeading: false,
             leading: Obx(
               () => addPageController.pageNumber.value == 2
@@ -62,7 +61,7 @@ class _AddScreenState extends State<AddScreen> {
                       },
                       icon: Icon(
                         Icons.arrow_back,
-                        color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                        color: Theme.of(context).colorScheme.onBackground,
                         size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                       ),
                       splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
@@ -78,7 +77,7 @@ class _AddScreenState extends State<AddScreen> {
                         },
                         icon: Icon(
                           Icons.close,
-                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          color: Theme.of(context).colorScheme.onBackground,
                           size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
                         splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
@@ -157,7 +156,7 @@ class _AddScreenState extends State<AddScreen> {
                         },
                         icon: Icon(
                           Icons.check,
-                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          color: Theme.of(context).colorScheme.onBackground,
                           size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
                         splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,

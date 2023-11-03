@@ -85,9 +85,7 @@ class ListScreen extends StatelessWidget {
                                 width: deviceWidth / 4,
                                 child: Icon(
                                   Icons.image_not_supported_outlined,
-                                  color: Get.isDarkMode
-                                      ? Colors.white12
-                                      : Colors.grey.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.error,
                                   size: deviceWidth * 0.2,
                                 ),
                               );
@@ -109,10 +107,10 @@ class ListScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(5),
                             height: (deviceWidth / 4) * 1.5,
                             decoration: BoxDecoration(
-                                color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
-                                  color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
+                                  color: Theme.of(context).colorScheme.onError,
                                 )
                             ),
                             child: SingleChildScrollView(
@@ -128,7 +126,7 @@ class ListScreen extends StatelessWidget {
                                       softWrap: true,
                                       style: TextStyle(
                                         fontSize: deviceWidth * 0.04,
-                                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -142,7 +140,7 @@ class ListScreen extends StatelessWidget {
                                       softWrap: true,
                                       style: TextStyle(
                                         fontSize: deviceWidth * 0.035,
-                                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -157,7 +155,7 @@ class ListScreen extends StatelessWidget {
                                 : listSortedByDate[index].dateTime.toString().split(' ')[0],
                             style: TextStyle(
                               fontSize: deviceWidth * 0.04,
-                              color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

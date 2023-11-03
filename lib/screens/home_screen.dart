@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviebim/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,6 +10,7 @@ import '../controllers/list_controller.dart';
 import '../models/movie_model.dart';
 import '../utilities/db_helper.dart';
 import '../screens/calendar_screen.dart';
+import '../main.dart';
 import 'list_screen.dart';
 import 'my_page_screen.dart';
 
@@ -79,11 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight, //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: isLoading || _selectedIndex == 2
             ? null
             : AppBar(
-                backgroundColor: Theme.of(context).primaryColorLight, //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
                 automaticallyImplyLeading: false,
                 actions: [
                   if(_selectedIndex == 0)
@@ -93,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       icon: Icon(
                         Icons.add,
-                        color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                        color: Theme.of(context).colorScheme.onBackground,
                         size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                       ),
                       splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
@@ -105,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         icon: Icon(
                           listController.sortedByStar.value ? Icons.date_range : Icons.star,
-                          color: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                          color: Theme.of(context).colorScheme.onBackground,
                           size: (deviceWidth > 600) ? deviceWidth / 23 : deviceWidth / 12,
                         ),
                         splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
@@ -137,8 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                selectedItemColor: Get.isDarkMode ? Colors.teal[300] : Colors.teal[300],
-                unselectedItemColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
+                selectedItemColor: Colors.teal[300],
+                unselectedItemColor: Theme.of(context).colorScheme.onBackground,
                 backgroundColor: Get.isDarkMode ? Colors.grey[850] : Colors.grey[100],
               ),
       ),

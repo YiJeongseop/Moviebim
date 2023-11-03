@@ -19,34 +19,68 @@ import 'api_key.dart';
 late final SharedPreferences prefs;
 final String defaultLocale = Platform.localeName;
 var consentStatus;
-bool englishTest = false; // false
-bool httpResponseTest = false; // false
-bool useRealAdId = true; // true
-bool consentTest = false; // false
-bool onDebug = false; // false
+bool englishTest = false; // false for release
+bool httpResponseTest = false; // false for release
+bool useRealAdId = false; // true for release
+bool consentTest = false; // false for release
+bool onDebug = true; // false for release
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.white,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.grey[50],
     elevation: 0.0,
   ),
-  primaryColor: Colors.white,
-  primaryColorDark: Colors.black,
-  dividerColor: Colors.grey.withOpacity(0.5),
-  primaryColorLight: Colors.grey[50],
+  dividerColor: Colors.grey.withOpacity(0.5), // 디바이더
+  cardColor: Colors.white, // 검색창 카드
+  colorScheme: ColorScheme(
+    brightness: Brightness.light,
+    primary: Colors.black.withOpacity(0.9), // 텍스트
+    onPrimary: Colors.transparent,
+    secondary: Colors.transparent,
+    onSecondary: Colors.transparent,
+    error: Colors.white12, // Icons.image_not_supported_outlined
+    onError: Colors.grey.withOpacity(0.9), // 검색창 돋보기, 전체(날짜 별로) 보기 텍스트 테두리,
+    background: Colors.grey[50]!, // 배경, 스낵바 텍스트 + X아이콘, alert dialog 배경, 달력 dayNameColor activeDayColor
+    onBackground: Colors.black.withOpacity(0.7), // 스낵바 배경, 앱바 아이콘, 바텀내비게이션바 unselectedItem, 달력 monthColor dayColor
+    surface: Colors.grey.withOpacity(0.5), // 검색창 테두리, 추가창(수정창) 포스터 테두리, 리뷰창 테두리
+    onSurface: Colors.white, // 검색창 배경, 리뷰창 배경, 전체(날짜 별로) 보기 텍스트 배경
+  ),
+  // primaryColor: Colors.white,
+  // primaryColorDark: Colors.black,
+  // primaryColorLight: Colors.grey[50],
+  textTheme: englishTest
+      ? GoogleFonts.robotoTextTheme()
+      : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
 );
 
 ThemeData _darkTheme = ThemeData(
   brightness: Brightness.dark,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.black,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.grey[800],
     elevation: 0.0,
   ),
-  primaryColor: Colors.black,
-  primaryColorDark: Colors.white,
-  dividerColor: Colors.black.withOpacity(0.4),
-  primaryColorLight: Colors.grey[800],
+  dividerColor: Colors.black.withOpacity(0.4), // 디바이더
+  cardColor: Colors.black.withOpacity(0.04), // 검색창 카드
+  colorScheme: ColorScheme(
+    brightness: Brightness.dark,
+    primary: Colors.white.withOpacity(0.9), // 텍스트
+    onPrimary: Colors.transparent,
+    secondary: Colors.transparent,
+    onSecondary: Colors.transparent,
+    error: Colors.grey.withOpacity(0.5), // Icons.image_not_supported_outlined
+    onError: Colors.white.withOpacity(0.3), // 검색창 돋보기, 전체(날짜 별로) 보기 텍스트 테두리
+    background: Colors.grey[800]!, // 배경, 스낵바 텍스트 + X아이콘, alert dialog 배경, 달력 dayNameColor activeDayColor
+    onBackground: Colors.grey[300]!, // 스낵바 배경, 앱바 아이콘, 바텀내비게이션바 unselectedItem, 달력 monthColor dayColor
+    surface: Colors.black.withOpacity(0.5), // 검색창 테두리, 추가창(수정창) 포스터 테두리, 리뷰창 테두리
+    onSurface: Colors.black.withOpacity(0.24), // 검색창 배경, 리뷰창 배경, 전체(날짜 별로) 보기 텍스트 배경
+  ),
+  // primaryColor: Colors.black,
+  // primaryColorDark: Colors.white,
+  // primaryColorLight: Colors.grey[800],
+  textTheme: englishTest
+      ? GoogleFonts.robotoTextTheme()
+      : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
 );
 
 void main() async {
@@ -112,16 +146,8 @@ class MyApp extends StatelessWidget {
           ? const Locale('en')
           : ((defaultLocale == 'ko_KR') ? const Locale('ko') : const Locale('en')),
       title: (defaultLocale == 'ko_KR') ? '무비빔' : 'Moviebim',
-      theme: _lightTheme.copyWith(
-        textTheme: englishTest
-            ? GoogleFonts.robotoTextTheme()
-            : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
-      ),
-      darkTheme: _darkTheme.copyWith(
-        textTheme: englishTest
-            ? GoogleFonts.robotoTextTheme()
-            : ((defaultLocale == 'ko_KR') ? GoogleFonts.nanumGothicTextTheme() : GoogleFonts.robotoTextTheme()),
-      ),
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',

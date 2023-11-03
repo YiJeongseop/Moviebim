@@ -28,21 +28,22 @@ AlertDialog loginAlertDialog(BuildContext context) {
             children: [
               Image.asset(
                 'assets/images/google_logo.png',
+                width: MediaQuery.of(context).size.width * 0.08,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: MediaQuery.of(context).size.width * 0.01,
               ),
               Flexible(
                 child: Text(
                   'Sign in with Google',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontSize: MediaQuery.of(context).size.width * 0.048,
                   ),
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.02,
+                width: MediaQuery.of(context).size.width * 0.01,
               ),
             ],
           ),
@@ -53,7 +54,7 @@ AlertDialog loginAlertDialog(BuildContext context) {
 
 AlertDialog tmdbAlertDialog(BuildContext context) {
   return AlertDialog(
-    backgroundColor: Colors.grey[50],
+    backgroundColor: Theme.of(context).colorScheme.background,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     content: SizedBox(
       height: MediaQuery.of(context).size.height * 0.25,
@@ -74,7 +75,7 @@ AlertDialog tmdbAlertDialog(BuildContext context) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.044,
-                  color: Colors.black.withOpacity(0.9),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
@@ -87,7 +88,7 @@ AlertDialog tmdbAlertDialog(BuildContext context) {
 
 AlertDialog okCancelDialog(BuildContext context, String text, BasicController basicController, bool isUpload) {
   return AlertDialog(
-    backgroundColor: Colors.grey[50],
+    backgroundColor: Theme.of(context).colorScheme.background,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     content: Text(
       text
@@ -151,7 +152,7 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
         child: Text(
           AppLocalizations.of(context)!.ok,
           style: TextStyle(
-            color: Colors.black.withOpacity(0.9),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),
@@ -165,7 +166,7 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
         child: Text(
           AppLocalizations.of(context)!.cancel,
           style: TextStyle(
-            color: Colors.black.withOpacity(0.9),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

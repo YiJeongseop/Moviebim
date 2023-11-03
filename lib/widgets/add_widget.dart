@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../controllers/movie_controller.dart';
@@ -29,10 +28,10 @@ class AddWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Get.isDarkMode ? Colors.black.withOpacity(0.5) : Colors.grey.withOpacity(0.5),
+                  color: Theme.of(context).colorScheme.surface,
                   width: 2,
                 ),
-                color: Get.isDarkMode ? Colors.black.withOpacity(0.2) : Colors.grey[50],
+                color: Theme.of(context).colorScheme.background,
               ),
               padding: const EdgeInsets.all(3.0),
               child: Image.network(
@@ -69,10 +68,10 @@ class AddWidget extends StatelessWidget {
             width: deviceWidth * 0.8,
             height: MediaQuery.of(context).size.height * 0.27,
             decoration: BoxDecoration(
-              color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
+              color: Theme.of(context).colorScheme.onSurface,
               borderRadius: BorderRadius.circular(5),
               border: Border.all(
-                color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
+                color: Theme.of(context).colorScheme.surface,
               )
             ),
             child: TextField(
@@ -86,7 +85,7 @@ class AddWidget extends StatelessWidget {
                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
               ),
               style: TextStyle(
-                color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                color: Theme.of(context).colorScheme.primary,
                 fontSize: deviceWidth * 0.045
               ),
               onChanged: (value) => textController.updateComment(value),

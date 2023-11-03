@@ -69,7 +69,7 @@ class MyPageScreen extends StatelessWidget {
                     return Text(
                       FirebaseAuth.instance.currentUser!.displayName!,
                       style: TextStyle(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                        color: Theme.of(context).colorScheme.primary,
                         fontSize: deviceWidth * 0.063,
                       ),
                       textAlign: TextAlign.center,
@@ -95,7 +95,7 @@ class MyPageScreen extends StatelessWidget {
                       ? "${basicController.entireRuntime.value ~/ 60}h ${basicController.entireRuntime.value % 60}m"
                       : (defaultLocale == 'ko_KR') ? "${basicController.entireRuntime.value ~/ 60}시간 ${basicController.entireRuntime.value % 60}분" : "${basicController.entireRuntime.value ~/ 60}h ${basicController.entireRuntime.value % 60}m",
                   style: TextStyle(
-                    color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: deviceWidth * 0.06,
                   ),
                   textAlign: TextAlign.center,
@@ -111,9 +111,9 @@ class MyPageScreen extends StatelessWidget {
                   if (snapshot.hasData || loginController.isLogined.value) {
                     return Container(
                       width: deviceWidth * 0.8,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
-                        borderRadius: const BorderRadius.only(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
                           topLeft: Radius.circular(10),
                         ),
@@ -143,7 +143,7 @@ class MyPageScreen extends StatelessWidget {
                                 Text(
                                   AppLocalizations.of(context)!.logout,
                                   style: TextStyle(
-                                    color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                                    color: Colors.black.withOpacity(0.9),
                                     fontSize: deviceWidth * 0.052,
                                   ),
                                 ),
@@ -161,9 +161,9 @@ class MyPageScreen extends StatelessWidget {
                   } else {
                     return Container(
                       width: deviceWidth * 0.8,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
-                        borderRadius: const BorderRadius.only(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
                           topLeft: Radius.circular(10),
                         ),
@@ -197,7 +197,7 @@ class MyPageScreen extends StatelessWidget {
                                 Text(
                                   AppLocalizations.of(context)!.login,
                                   style: TextStyle(
-                                    color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                                    color: Colors.black.withOpacity(0.9),
                                     fontSize: deviceWidth * 0.048,
                                   ),
                                 ),
@@ -224,7 +224,7 @@ class MyPageScreen extends StatelessWidget {
               Container(
                 width: deviceWidth * 0.8,
                 decoration: BoxDecoration(
-                    color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
+                    color: Colors.white,
                 ),
                 child: Material(
                   color: Colors.transparent,
@@ -253,7 +253,7 @@ class MyPageScreen extends StatelessWidget {
                           Text(
                             AppLocalizations.of(context)!.changeTheme,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                              color: Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.052,
                             ),
                           ),
@@ -276,9 +276,9 @@ class MyPageScreen extends StatelessWidget {
               ),
               Container(
                 width: deviceWidth * 0.8,
-                decoration: BoxDecoration(
-                  color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
                   )
@@ -312,7 +312,7 @@ class MyPageScreen extends StatelessWidget {
                           Text(
                             AppLocalizations.of(context)!.credits,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                              color: Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.052,
                             ),
                           ),
@@ -334,9 +334,9 @@ class MyPageScreen extends StatelessWidget {
             children: [
               Container(
                 width: deviceWidth * 0.8,
-                decoration: BoxDecoration(
-                  color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),
                     topLeft: Radius.circular(10),
                   ),
@@ -374,7 +374,7 @@ class MyPageScreen extends StatelessWidget {
                           Text(
                             AppLocalizations.of(context)!.save,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                              color: Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.042,
                             ),
                           ),
@@ -397,9 +397,9 @@ class MyPageScreen extends StatelessWidget {
               ),
               Container(
                 width: deviceWidth * 0.8,
-                decoration: BoxDecoration(
-                  color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.white,
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
                   ),
@@ -437,7 +437,7 @@ class MyPageScreen extends StatelessWidget {
                           Text(
                             AppLocalizations.of(context)!.load,
                             style: TextStyle(
-                              color: Get.isDarkMode ? Colors.black : Colors.black.withOpacity(0.9),
+                              color: Colors.black.withOpacity(0.9),
                               fontSize: deviceWidth * 0.042,
                             ),
                           ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:get/get.dart';
-import 'package:moviebim/widgets/painter_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/basic_controller.dart';
 import '../main.dart';
 import '../models/movie_model.dart';
 import '../widgets/star_widget.dart';
+import '../widgets/painter_widget.dart';
 import 'home_screen.dart';
 
 class CalendarScreen extends StatelessWidget {
@@ -49,12 +49,12 @@ class CalendarScreen extends StatelessWidget {
           lastDate: DateTime(2028, 10, 1),
           onDateSelected: (date) => basicController.selectedDate.value = DateTime(date.year, date.month, date.day),
           leftMargin: 10,
-          monthColor: Get.isDarkMode ? Colors.grey[300] : Colors.black.withOpacity(0.7),
-          dayColor: Get.isDarkMode ? Colors.grey[400] : Colors.black.withOpacity(0.5),
-          dayNameColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
-          activeDayColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          monthColor: Theme.of(context).colorScheme.onBackground,
+          dayColor: Theme.of(context).colorScheme.onBackground,
+          dayNameColor: Theme.of(context).colorScheme.background,
+          activeDayColor: Theme.of(context).colorScheme.background,
           activeBackgroundDayColor: Colors.teal[300],
-          dotsColor: Colors.teal[300], //Get.isDarkMode ? Colors.grey[800] : Colors.grey[50],
+          dotsColor: Colors.teal[300],
           locale: englishTest ? 'en' : ((defaultLocale == 'ko_KR') ? 'ko' : 'en'),
         ),
         const SizedBox(height: 4),
@@ -88,7 +88,7 @@ class CalendarScreen extends StatelessWidget {
                                 width: deviceWidth / 3,
                                 child: Icon(
                                   Icons.image_not_supported_outlined,
-                                  color: Get.isDarkMode ? Colors.white12 : Colors.grey.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.error,
                                   size: deviceWidth * 0.25,
                                 ),
                               );
@@ -108,10 +108,10 @@ class CalendarScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10),
                             height: (deviceWidth / 3) * 1.5,
                             decoration: BoxDecoration(
-                                color: Get.isDarkMode ? Colors.black.withOpacity(0.24) : Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
-                                  color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9),
+                                  color: Theme.of(context).colorScheme.onError,
                                 )
                             ),
                             child: SingleChildScrollView(
@@ -124,7 +124,10 @@ class CalendarScreen extends StatelessWidget {
                                     child: Text(
                                       basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
                                       softWrap: true,
-                                      style: TextStyle(fontSize: deviceWidth * 0.045, color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9)),
+                                      style: TextStyle(
+                                        fontSize: deviceWidth * 0.045,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 7),
@@ -134,7 +137,10 @@ class CalendarScreen extends StatelessWidget {
                                     child: Text(
                                       basicController.savedMovies[listIndex][basicController.selectedDate.value][index].comment,
                                       softWrap: true,
-                                      style: TextStyle(fontSize: deviceWidth * 0.04, color: Get.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9)),
+                                      style: TextStyle(
+                                        fontSize: deviceWidth * 0.04,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -148,14 +154,20 @@ class CalendarScreen extends StatelessWidget {
                               Container(
                                 margin: const EdgeInsets.only(right: 10),
                                 child: InkWell(
-                                  child: Icon(Icons.edit, color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9)),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Theme.of(context).colorScheme.onBackground,
+                                  ),
                                   onTap: () {
                                     Get.toNamed('/edit', arguments: [basicController, listIndex, index]);
                                   },
                                 ),
                               ),
                               InkWell(
-                                child: Icon(Icons.delete_forever_outlined, color: Get.isDarkMode ? Colors.white.withOpacity(0.3) : Colors.grey.withOpacity(0.9)),
+                                child: Icon(
+                                  Icons.delete_forever_outlined,
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
                                 onTap: () {
                                   final movieModel = MovieModel(
                                     title: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].title,
