@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 
 import '../models/movie_model.dart';
 
-const String dbName = 'test5.db';
+const String dbName = 'test5.db'; // moviebim.db for release
 const String tableMovie = 'tableMovie';
 const String columnTitle = 'title';
 const String columnPosterPath = 'posterPath';
@@ -14,7 +14,9 @@ const String columnComment = 'comment';
 const String columnDateTime = 'dateTime';
 const String columnRuntime = 'runtime';
 
-const List<double> star = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
+const List<double> indexToStar = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
+Map<double, int> starToIndex = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
+  2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
 
 class DBHelper {
   Database? _database;
@@ -61,7 +63,7 @@ class DBHelper {
     final batch = db.batch();
 
     for(int i = 0; i < 10; i++) {
-      for(MovieModel j in moviesSortedByStar[i][star[i]]){
+      for(MovieModel j in moviesSortedByStar[i][indexToStar[i]]){
         Map<String, dynamic> data = {
           columnTitle: j.title,
           columnPosterPath: j.posterPath,
@@ -139,10 +141,7 @@ class DBHelper {
         returnList[0].add({dateTime : [movieModel]});
       }
 
-      Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
-      2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
-
-      returnList[1][temp[movie[columnRating].toDouble()]][movie[columnRating].toDouble()].add(movieModel);
+      returnList[1][starToIndex[movie[columnRating].toDouble()]][movie[columnRating].toDouble()].add(movieModel);
     }
 
     returnList[0].sort((a, b) {
@@ -158,7 +157,7 @@ class DBHelper {
     });
 
     for(int i = 0; i < 10; i++){
-      returnList[1][i][star[i]].sort((a, b) {
+      returnList[1][i][indexToStar[i]].sort((a, b) {
         final DateTime dateA = a.dateTime;
         final DateTime dateB = b.dateTime;
         if (dateA.isBefore(dateB)) {

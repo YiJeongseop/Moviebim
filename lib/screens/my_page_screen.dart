@@ -7,14 +7,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/basic_controller.dart';
 import '../controllers/login_controller.dart';
-import '../main.dart';
-import '../api_key.dart';
 import '../services/admob_service.dart';
 import '../services/google_service.dart';
+import '../utilities/snack_bar.dart';
 import '../widgets/alert_widget.dart';
+import '../api_key.dart';
+import '../main.dart';
+
+enum ButtonType {logout, login, theme, credits, save, load}
 
 class MyPageScreen extends StatelessWidget {
-  MyPageScreen({Key? key, required this.basicController, required this.loginController}) : super(key: key);
+  MyPageScreen({Key? key, required this.basicController, required this.loginController})
+      : super(key: key);
   final BasicController basicController;
   final LoginController loginController;
 
@@ -36,7 +40,6 @@ class MyPageScreen extends StatelessWidget {
       adUnitId: useRealAdId ? realBannerAdId : testBannerAdId,
       request: consentStatus == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
     )..load();
-
     final deviceWidth = MediaQuery.of(context).size.width;
     return Center(
       child: Column(
@@ -109,108 +112,30 @@ class MyPageScreen extends StatelessWidget {
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData || loginController.isLogined.value) {
-                    return Container(
-                      width: deviceWidth * 0.8,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                        ),
+                    return buttonContainer(
+                      deviceWidth: deviceWidth,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10),
-                          ),
-                          onTap: (){
-                            googleSignIn.disconnect();
-                            FirebaseAuth.instance.signOut();
-                            loginController.isLogined.value = false;
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: deviceWidth * 0.08,
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.logout,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.9),
-                                    fontSize: deviceWidth * 0.052,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.file_copy_outlined,
-                                  size: deviceWidth * 0.08,
-                                  color: Colors.transparent,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      buttonType: ButtonType.logout,
+                      iconData: Icons.logout,
+                      text: AppLocalizations.of(context)!.logout,
+                      fontSize: deviceWidth * 0.052,
+                      context: context,
                     );
                   } else {
-                    return Container(
-                      width: deviceWidth * 0.8,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                        ),
+                    return buttonContainer(
+                      deviceWidth: deviceWidth,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
                       ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10),
-                          ),
-                          onTap: (){
-                            showDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (BuildContext context) {
-                                return loginAlertDialog(context);
-                              },
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.login,
-                                  size: deviceWidth * 0.08,
-                                  color: Colors.black.withOpacity(0.5),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.login,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.9),
-                                    fontSize: deviceWidth * 0.048,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.file_copy_outlined,
-                                  size: deviceWidth * 0.08,
-                                  color: Colors.transparent,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      buttonType: ButtonType.login,
+                      iconData: Icons.login,
+                      text: AppLocalizations.of(context)!.login,
+                      fontSize: deviceWidth * 0.052,
+                      context: context,
                     );
                   }
                 },
@@ -221,52 +146,14 @@ class MyPageScreen extends StatelessWidget {
                 endIndent: deviceWidth * 0.1,
                 color: Theme.of(context).dividerColor,
               ),
-              Container(
-                width: deviceWidth * 0.8,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: (){
-                      try{
-                        if(!onDebug){
-                          callInterstitialAd();
-                          loadInterstitialAd();
-                        }
-                      } finally {
-                        _saveThemeStatus(!Get.isDarkMode);
-                        Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Get.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                            size: deviceWidth * 0.08,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.changeTheme,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.9),
-                              fontSize: deviceWidth * 0.052,
-                            ),
-                          ),
-                          Icon(
-                            Icons.file_copy_outlined,
-                            size: deviceWidth * 0.08,
-                            color: Colors.transparent,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              buttonContainer(
+                deviceWidth: deviceWidth,
+                borderRadius: null,
+                buttonType: ButtonType.theme,
+                iconData: Get.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                text: AppLocalizations.of(context)!.changeTheme,
+                fontSize: deviceWidth * 0.052,
+                context: context,
               ),
               Divider(
                   height: 3,
@@ -274,120 +161,34 @@ class MyPageScreen extends StatelessWidget {
                   endIndent: deviceWidth * 0.1,
                   color: Theme.of(context).dividerColor,
               ),
-              Container(
-                width: deviceWidth * 0.8,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  )
+              buttonContainer(
+                deviceWidth: deviceWidth,
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                    ),
-                    onTap: (){
-                      showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return tmdbAlertDialog(context);
-                        },
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.file_copy_outlined,
-                            size: deviceWidth * 0.08,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.credits,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.9),
-                              fontSize: deviceWidth * 0.052,
-                            ),
-                          ),
-                          Icon(
-                            Icons.file_copy_outlined,
-                            size: deviceWidth * 0.08,
-                            color: Colors.transparent,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )
+                buttonType: ButtonType.credits,
+                iconData: Icons.file_copy_outlined,
+                text: AppLocalizations.of(context)!.credits,
+                fontSize: deviceWidth * 0.052,
+                context: context,
+              ),
             ],
           ),
           const SizedBox(height: 50),
           Column(
             children: [
-              Container(
-                width: deviceWidth * 0.8,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                  ),
+              buttonContainer(
+                deviceWidth: deviceWidth,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(10),
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      topLeft: Radius.circular(10),
-                    ),
-                    onTap: () async {
-                      if(loginController.isLogined.value){
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return okCancelDialog(context, AppLocalizations.of(context)!.wantToSave, basicController, true);
-                          },
-                        );
-                      } else {
-                        showSnackbar(context, AppLocalizations.of(context)!.pleaseLogin);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.upload,
-                            size: deviceWidth * 0.08,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.save,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.9),
-                              fontSize: deviceWidth * 0.042,
-                            ),
-                          ),
-                          Icon(
-                            Icons.file_copy_outlined,
-                            size: deviceWidth * 0.08,
-                            color: Colors.transparent,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                buttonType: ButtonType.save,
+                iconData: Icons.upload,
+                text: AppLocalizations.of(context)!.save,
+                fontSize: deviceWidth * 0.042,
+                context: context,
               ),
               Divider(
                 height: 3,
@@ -395,66 +196,124 @@ class MyPageScreen extends StatelessWidget {
                 endIndent: deviceWidth * 0.1,
                 color: Theme.of(context).dividerColor,
               ),
-              Container(
-                width: deviceWidth * 0.8,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
+              buttonContainer(
+                deviceWidth: deviceWidth,
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                    ),
-                    onTap: () async {
-                      if(loginController.isLogined.value) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return okCancelDialog(context, AppLocalizations.of(context)!.wantToLoad, basicController, false);
-                          },
-                        );
-                      } else {
-                        showSnackbar(context, AppLocalizations.of(context)!.pleaseLogin);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.download,
-                            size: deviceWidth * 0.08,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.load,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.9),
-                              fontSize: deviceWidth * 0.042,
-                            ),
-                          ),
-                          Icon(
-                            Icons.file_copy_outlined,
-                            size: deviceWidth * 0.08,
-                            color: Colors.transparent,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                buttonType: ButtonType.load,
+                iconData: Icons.download,
+                text: AppLocalizations.of(context)!.load,
+                fontSize: deviceWidth * 0.042,
+                context: context,
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Container buttonContainer({required double deviceWidth, required BorderRadius? borderRadius,
+    required ButtonType buttonType, required IconData iconData, required String text,
+    required double fontSize, required BuildContext context
+  }){
+    return Container(
+      width: deviceWidth * 0.8,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: borderRadius,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: borderRadius,
+          onTap: (){
+            if (buttonType == ButtonType.logout){
+              googleSignIn.disconnect();
+              FirebaseAuth.instance.signOut();
+              loginController.isLogined.value = false;
+            } else if (buttonType == ButtonType.login) {
+              showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return loginAlertDialog(context);
+                },
+              );
+            } else if (buttonType == ButtonType.theme) {
+              try{
+                if(!onDebug){
+                  callInterstitialAd();
+                  loadInterstitialAd();
+                }
+              } catch (e) {
+                print("Error : $e");
+              } finally {
+                _saveThemeStatus(!Get.isDarkMode);
+                Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+              }
+            } else if (buttonType == ButtonType.credits) {
+              showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return tmdbAlertDialog(context);
+                },
+              );
+            } else if (buttonType == ButtonType.save) {
+              if(loginController.isLogined.value){
+                showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return okCancelDialog(context, AppLocalizations.of(context)!.wantToSave, basicController, true);
+                  },
+                );
+              } else {
+                showSnackBar(context, AppLocalizations.of(context)!.pleaseLogin);
+              }
+            } else if (buttonType == ButtonType.load) {
+              if(loginController.isLogined.value) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return okCancelDialog(context, AppLocalizations.of(context)!.wantToLoad, basicController, false);
+                  },
+                );
+              } else {
+                showSnackBar(context, AppLocalizations.of(context)!.pleaseLogin);
+              }
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  iconData,
+                  size: deviceWidth * 0.08,
+                  color: Colors.black.withOpacity(0.5),
+                ),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.9),
+                    fontSize: fontSize,
+                  ),
+                ),
+                Icon(
+                  Icons.file_copy_outlined,
+                  size: deviceWidth * 0.08,
+                  color: Colors.transparent,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

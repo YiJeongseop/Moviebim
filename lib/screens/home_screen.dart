@@ -7,12 +7,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../controllers/login_controller.dart';
 import '../controllers/basic_controller.dart';
 import '../controllers/list_controller.dart';
-import '../models/movie_model.dart';
-import '../utilities/db_helper.dart';
-import '../screens/calendar_screen.dart';
-import '../main.dart';
+import 'calendar_screen.dart';
 import 'list_screen.dart';
 import 'my_page_screen.dart';
+import '../utilities/db_helper.dart';
+import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -142,18 +141,5 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
       ),
     );
-  }
-}
-
-void deleteListStar(MovieModel movieModel, BasicController basicController) {
-  Map<double, int> temp = {5: 0, 4.5: 1, 4: 2, 3.5: 3, 3: 4, 2.5: 5, 2: 6, 1.5: 7, 1: 8, 0.5: 9};
-  int index = temp[movieModel.rating]!;
-  int j = 0;
-  for (MovieModel i in basicController.savedMoviesStar[index][movieModel.rating]) {
-    if (i == movieModel) {
-      basicController.savedMoviesStar[index][movieModel.rating].removeAt(j);
-      break;
-    }
-    j++;
   }
 }

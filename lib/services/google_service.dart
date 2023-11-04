@@ -10,14 +10,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:http/http.dart" as http;
 
 import '../models/movie_model.dart';
+import '../utilities/db_helper.dart';
+import '../utilities/snack_bar.dart';
+import '../widgets/loading_widget.dart';
 
-const String fileName = 'test5.json';
+const String fileName = 'test5.json'; // moviebim.json for release
 final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [drive.DriveApi.driveFileScope, drive.DriveApi.driveAppdataScope]
 );
 
 Future<void> signInWithGoogle(BuildContext context) async {
-  Get.dialog(const LoadingOverlay(), barrierDismissible: false);
+  Get.dialog(const LoadingWidget(), barrierDismissible: false);
   GoogleSignInAccount? googleUser;
 
   try{
@@ -25,13 +28,14 @@ Future<void> signInWithGoogle(BuildContext context) async {
   } catch (e) {
     Get.back();
     Get.back();
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
     return;
   }
 
   if(googleUser == null){
     Get.back();
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
     return;
   }
 
@@ -50,46 +54,9 @@ Future<void> signInWithGoogle(BuildContext context) async {
     return;
   } catch (e) {
     Get.back();
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
     return;
-  }
-}
-
-void showSnackbar(BuildContext context, String text){
-  ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.background,
-          ),
-        ),
-        showCloseIcon: true,
-        closeIconColor: Theme.of(context).colorScheme.background,
-        backgroundColor: Theme.of(context).colorScheme.onBackground,
-        duration: const Duration(seconds: 5),
-      )
-  );
-}
-
-class LoadingOverlay extends StatelessWidget {
-  const LoadingOverlay({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Stack(
-      fit: StackFit.expand,
-      children: [
-        ModalBarrier(
-          color: Colors.black54,
-          dismissible: false,
-        ),
-        Center(
-          child: CircularProgressIndicator(),
-        )
-      ],
-    );
   }
 }
 
@@ -108,7 +75,9 @@ Future<void> uploadToDrive(List<MovieModel> movies, BuildContext context) async 
   try{
     driveApi = await _getDriveApi();
   } catch (e) {
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
+    Get.back();
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
     return;
   }
 
@@ -122,9 +91,12 @@ Future<void> uploadToDrive(List<MovieModel> movies, BuildContext context) async 
   final media = drive.Media(Stream.value(utf8.encode(jsonData1)), jsonData2.length);
   try{
     await driveApi!.files.create(driveFile, uploadMedia: media);
+    Get.back();
+    Get.back();
   } catch (e) {
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
-    return;
+    Get.back();
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
   }
 }
 
@@ -155,20 +127,25 @@ Future<List<dynamic>?> downloadFromDrive(BuildContext context) async {
   try{
     driveApi = await _getDriveApi();
   } catch (e) {
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
-    return null; // 리스트 덮어씌우면 안된다.
+    Get.back();
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
+    return null;
   }
 
   try{
     fileId = await getFileIdByName(fileName);
   } catch (e) {
-    print(e);
-    showSnackbar(context, AppLocalizations.of(context)!.failed);
+    Get.back();
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.failed);
     return null;
   }
 
   if(fileId == null){
-    showSnackbar(context, AppLocalizations.of(context)!.noSavedFiles);
+    Get.back();
+    Get.back();
+    showSnackBar(context, AppLocalizations.of(context)!.noSavedFiles);
     return null;
   }
 
@@ -205,10 +182,7 @@ Future<List<dynamic>?> downloadFromDrive(BuildContext context) async {
       returnList[0].add({dateTime: [movieModel]});
     }
 
-    Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
-      2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
-
-    returnList[1][temp[movieModel.rating]][movieModel.rating].add(movieModel);
+    returnList[1][starToIndex[movieModel.rating]][movieModel.rating].add(movieModel);
   }
 
   returnList[0].sort((a, b) {
@@ -224,9 +198,7 @@ Future<List<dynamic>?> downloadFromDrive(BuildContext context) async {
   });
 
   for(int i = 0; i < 10; i++){
-    List<double> star = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
-
-    returnList[1][i][star[i]].sort((a, b) {
+    returnList[1][i][indexToStar[i]].sort((a, b) {
       final DateTime dateA = a.dateTime;
       final DateTime dateB = b.dateTime;
       if (dateA.isBefore(dateB)) {

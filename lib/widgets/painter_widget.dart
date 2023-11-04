@@ -7,10 +7,10 @@ class LinePainter extends CustomPainter {
     final linePaint = Paint()
       ..color = (Get.isDarkMode ? Colors.grey[700] : Colors.black.withOpacity(0.7))!
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 16.0;
+      ..strokeWidth = 20.0;
 
     final squarePaint = Paint()
-      ..color = (Get.isDarkMode ? Colors.grey[800] : Colors.grey[50])! // 배경 색과 같게
+      ..color = (Get.isDarkMode ? Colors.grey[800] : Colors.grey[50])! // 배경 색과 같은 색으로 한다.
       ..style = PaintingStyle.fill;
 
     final lineY = size.height / 2;

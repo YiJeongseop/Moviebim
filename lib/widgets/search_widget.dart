@@ -6,6 +6,7 @@ import '../controllers/add_page_controller.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 import '../services/tmdb_service.dart';
+import '../utilities/snack_bar.dart';
 
 class SearchWidget extends StatelessWidget {
   SearchWidget({Key? key,
@@ -13,7 +14,7 @@ class SearchWidget extends StatelessWidget {
     required this.addPageController, required this.textFocus})
       : super(key: key);
 
-  final TmdbService _tmdbService = TmdbService();
+  final TMDbService _tmdbService = TMDbService();
   final MovieController movieController;
   final TextController textController;
   final AddPageController addPageController;
@@ -31,7 +32,7 @@ class SearchWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.surface,
               width: 1.0,
             ),
-            borderRadius: BorderRadius.circular(4.0),
+            borderRadius: BorderRadius.circular(5.0),
             color: Theme.of(context).colorScheme.onSurface,
           ),
           margin: const EdgeInsets.only(left: 15, right: 15),
@@ -57,32 +58,10 @@ class SearchWidget extends StatelessWidget {
                       final searchResult = await _tmdbService.searchMovies(value);
                       movieController.movies.value = searchResult['results'];
                       if(movieController.movies.isEmpty){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              AppLocalizations.of(context)!.noResult,
-                              style: TextStyle(color: Theme.of(context).colorScheme.background),
-                            ),
-                            duration: const Duration(seconds: 5),
-                            showCloseIcon: true,
-                            closeIconColor: Theme.of(context).colorScheme.background,
-                            backgroundColor: Theme.of(context).colorScheme.onBackground,
-                          ),
-                        );
+                        showSnackBar(context, AppLocalizations.of(context)!.noResult);
                       }
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context)!.errorMessage,
-                            style: TextStyle(color: Theme.of(context).colorScheme.background),
-                          ),
-                          duration: const Duration(seconds: 5),
-                          showCloseIcon: true,
-                          closeIconColor: Theme.of(context).colorScheme.background,
-                          backgroundColor: Theme.of(context).colorScheme.onBackground,
-                        ),
-                      );
+                      showSnackBar(context, AppLocalizations.of(context)!.errorMessage);
                     }
                   },
                 ),
@@ -123,35 +102,13 @@ class SearchWidget extends StatelessWidget {
                           movieController.movieRuntime.value = 0;
                           movieController.movieRuntime.value = await _tmdbService.fetchRuntime(movie['id']);
                           if(movieController.movieRuntime.value == 0){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(context)!.errorMessage,
-                                  style: TextStyle(color: Theme.of(context).colorScheme.background),
-                                ),
-                                duration: const Duration(seconds: 5),
-                                showCloseIcon: true,
-                                closeIconColor: Theme.of(context).colorScheme.background,
-                                backgroundColor: Theme.of(context).colorScheme.onBackground,
-                              ),
-                            );
+                            showSnackBar(context, AppLocalizations.of(context)!.errorMessage);
                             return;
                           }
                           movieController.selectedMovie.add(movie);
                           addPageController.pageNumber.value = 2;
                         } catch(e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.of(context)!.errorMessage,
-                                style: TextStyle(color: Theme.of(context).colorScheme.background),
-                              ),
-                              duration: const Duration(seconds: 5),
-                              showCloseIcon: true,
-                              closeIconColor: Theme.of(context).colorScheme.background,
-                              backgroundColor: Theme.of(context).colorScheme.onBackground,
-                            ),
-                          );
+                          showSnackBar(context, AppLocalizations.of(context)!.errorMessage);
                         }
                       }
                     },
@@ -189,6 +146,7 @@ class SearchWidget extends StatelessWidget {
                                   child: Text(
                                     movie['title'],
                                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),

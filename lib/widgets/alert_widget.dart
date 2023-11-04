@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../controllers/basic_controller.dart';
-import '../main.dart';
 import '../models/movie_model.dart';
 import '../screens/home_screen.dart';
 import '../services/admob_service.dart';
 import '../services/google_service.dart';
 import '../utilities/db_helper.dart';
+import '../widgets/loading_widget.dart';
+import '../main.dart';
 
 AlertDialog loginAlertDialog(BuildContext context) {
   return AlertDialog(
@@ -36,7 +37,6 @@ AlertDialog loginAlertDialog(BuildContext context) {
               Flexible(
                 child: Text(
                   'Sign in with Google',
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width * 0.048,
                   ),
@@ -91,7 +91,10 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
     backgroundColor: Theme.of(context).colorScheme.background,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     content: Text(
-      text
+      text,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+      ),
     ),
     actions: [
       TextButton(
@@ -99,7 +102,8 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
           overlayColor: MaterialStateProperty.all(Colors.teal[300]?.withOpacity(0.3)),
         ),
         onPressed: () async {
-          Get.dialog(const LoadingOverlay(), barrierDismissible: false);
+          Get.dialog(const LoadingWidget(), barrierDismissible: false);
+
           if(isUpload) {
             List<MovieModel> movies = [];
             for (int i = 0; i < basicController.savedMovies.length; i++){
@@ -115,26 +119,25 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
                 loadInterstitialAd();
               }
             } catch (e) {
-              print(e);
+              print("Error : $e");
             }
           } else {
             List<dynamic>? result = await downloadFromDrive(context);
-            if(result == null) {
-              Get.back();
-            } else {
+
+            if(result != null) {
               basicController.savedMovies.value = result[0];
               basicController.savedMoviesStar.value = result[1];
               await dbHelper.deleteAllData();
               await dbHelper.insertAllData(basicController.savedMoviesStar);
 
-              int temp = 0;
+              int sumOfRuntime = 0;
               for(int i = 0; i < 10; i++) {
-                for(MovieModel j in basicController.savedMoviesStar[i][star[i]]){
-                  temp += j.runtime;
+                for(MovieModel movieModel in basicController.savedMoviesStar[i][indexToStar[i]]){
+                  sumOfRuntime += movieModel.runtime;
                 }
               }
-              prefs.setInt('runtime', temp);
-              basicController.entireRuntime.value = temp;
+              prefs.setInt('runtime', sumOfRuntime);
+              basicController.entireRuntime.value = sumOfRuntime;
 
               try {
                 if(!onDebug){
@@ -142,12 +145,13 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
                   loadInterstitialAd();
                 }
               } catch (e) {
-                print(e);
+                print("Error : $e");
               }
+
+              Get.back();
+              Get.back();
             }
           }
-          Get.back();
-          Get.back();
         },
         child: Text(
           AppLocalizations.of(context)!.ok,

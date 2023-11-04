@@ -3,31 +3,21 @@ import 'package:get/get.dart';
 
 import '../controllers/basic_controller.dart';
 import '../controllers/list_controller.dart';
+import '../utilities/db_helper.dart';
 import '../widgets/star_widget.dart';
 
 class ListScreen extends StatelessWidget {
   ListScreen({Key? key, required this.basicController}) : super(key: key);
   final BasicController basicController;
   final ListController listController = Get.put(ListController());
-  Map<double, int> starIndexTable = {5: 0, 4.5: 1, 4: 2, 3.5: 3, 3: 4, 2.5: 5, 2: 6, 1.5: 7, 1: 8, 0.5: 9};
 
-  int getListLength(bool isSortedByStar) {
-    int returnValue = 0;
-    if (isSortedByStar) {
-      for (double i = 5; i > 0; i -= 0.5) {
-        int temp2 = basicController.savedMoviesStar[starIndexTable[i]!][i].length;
-        returnValue += temp2;
-      }
-      return returnValue;
-    } else {
-      for (int i = 0; i < basicController.savedMovies.length; i++) {
-        for (DateTime key in basicController.savedMovies[i].keys) {
-          int temp = basicController.savedMovies[i][key].length;
-          returnValue += temp;
-        }
-      }
-      return returnValue;
+  int getListLength() {
+    int length = 0;
+    for (double i = 5; i > 0; i -= 0.5) {
+      int temp = basicController.savedMoviesStar[starToIndex[i]!][i].length;
+      length += temp;
     }
+    return length;
   }
 
   List<dynamic> getListSortedByDate() {
@@ -43,7 +33,7 @@ class ListScreen extends StatelessWidget {
   List<dynamic> getListSortedByStar() {
     List<dynamic> returnList = [];
     for (double i = 5; i > 0; i -= 0.5) {
-      returnList += basicController.savedMoviesStar[starIndexTable[i]!][i];
+      returnList += basicController.savedMoviesStar[starToIndex[i]!][i];
     }
     return returnList;
   }
@@ -51,7 +41,7 @@ class ListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
-    final length = getListLength(true);
+    final length = getListLength();
     final listSortedByStar = getListSortedByStar();
     final listSortedByDate = getListSortedByDate();
     return Column(
@@ -107,11 +97,11 @@ class ListScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(5),
                             height: (deviceWidth / 4) * 1.5,
                             decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.onError,
-                                )
+                              color: Theme.of(context).colorScheme.onSurface,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.onError,
+                              ),
                             ),
                             child: SingleChildScrollView(
                               child: Column(
@@ -168,7 +158,7 @@ class ListScreen extends StatelessWidget {
               );
             }),
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(color: Theme.of(context).dividerColor, thickness: 1.1);
+              return Divider(color: Theme.of(context).dividerColor, thickness: 1);
             },
           ),
         ),

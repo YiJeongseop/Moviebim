@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/add_page_controller.dart';
-import '../screens/home_screen.dart';
-import '../models/movie_model.dart';
 import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 import '../controllers/basic_controller.dart';
+import '../models/movie_model.dart';
+import 'home_screen.dart';
 import '../utilities/db_helper.dart';
 import '../widgets/search_widget.dart';
-import '../widgets/add_widget.dart';
+import '../widgets/detail_widget.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({Key? key}) : super(key: key);
@@ -138,7 +138,7 @@ class _AddScreenState extends State<AddScreen> {
                               }
                             }
                           }
-                          saveToListStar(movieModel, basicController);
+                          saveToListOfStar(movieModel, basicController);
 
                           dbHelper.insertData({
                             columnTitle: movieModel.title,
@@ -177,10 +177,13 @@ class _AddScreenState extends State<AddScreen> {
                           addPageController: addPageController,
                           textFocus: textFocus,
                         )
-                      : AddWidget(
+                      : DetailWidget(
                           movieController: movieController,
                           textController: textController,
                           textFocus: textFocus,
+                          textEditingController: null,
+                          posterPath: 'https://image.tmdb.org/t/p/w500${movieController.selectedMovie[0]['poster_path']}',
+                          initialRating: 3,
                         ),
                 ),
               ),
@@ -192,10 +195,8 @@ class _AddScreenState extends State<AddScreen> {
   }
 }
 
-void saveToListStar(MovieModel movieModel, BasicController basicController) {
-  Map<double, int> temp = {5 : 0, 4.5 : 1, 4 : 2, 3.5 : 3, 3 : 4, 2.5 : 5,
-    2 : 6, 1.5 : 7, 1 : 8, 0.5 : 9};
-  int index = temp[movieModel.rating]!;
+void saveToListOfStar(MovieModel movieModel, BasicController basicController) {
+  int index = starToIndex[movieModel.rating]!;
   double rating = movieModel.rating;
   int j = 0;
   if(basicController.savedMoviesStar[index][rating].isEmpty){

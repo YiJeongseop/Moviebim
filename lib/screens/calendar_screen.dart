@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/basic_controller.dart';
-import '../main.dart';
 import '../models/movie_model.dart';
+import 'home_screen.dart';
+import '../utilities/db_helper.dart';
 import '../widgets/star_widget.dart';
 import '../widgets/painter_widget.dart';
-import 'home_screen.dart';
+import '../main.dart';
 
 class CalendarScreen extends StatelessWidget {
   CalendarScreen({Key? key, required this.basicController}) : super(key: key);
@@ -39,9 +40,10 @@ class CalendarScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomPaint(
-          size: Size(deviceWidth, 16),
+          size: Size(deviceWidth, 20),
           painter: LinePainter(),
         ),
+        const SizedBox(height: 3),
         CalendarTimeline(
           showYears: false,
           initialDate: basicController.selectedDate.value,
@@ -57,12 +59,12 @@ class CalendarScreen extends StatelessWidget {
           dotsColor: Colors.teal[300],
           locale: englishTest ? 'en' : ((defaultLocale == 'ko_KR') ? 'ko' : 'en'),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         CustomPaint(
-          size: Size(deviceWidth, 16),
+          size: Size(deviceWidth, 20),
           painter: LinePainter(),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         Expanded(
           child: Obx(() => ListView.separated(
             itemCount: checkKeyInList(basicController.savedMovies, basicController.selectedDate.value)
@@ -108,11 +110,11 @@ class CalendarScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10),
                             height: (deviceWidth / 3) * 1.5,
                             decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.onError,
-                                )
+                              color: Theme.of(context).colorScheme.onSurface,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.onError,
+                              ),
                             ),
                             child: SingleChildScrollView(
                               child: Column(
@@ -166,7 +168,7 @@ class CalendarScreen extends StatelessWidget {
                               InkWell(
                                 child: Icon(
                                   Icons.delete_forever_outlined,
-                                  color: Theme.of(context).colorScheme.error,
+                                  color: Theme.of(context).colorScheme.onBackground,
                                 ),
                                 onTap: () {
                                   final movieModel = MovieModel(
@@ -177,7 +179,7 @@ class CalendarScreen extends StatelessWidget {
                                     dateTime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].dateTime,
                                     runtime: basicController.savedMovies[listIndex][basicController.selectedDate.value][index].runtime,
                                   );
-                                  deleteListStar(movieModel, basicController);
+                                  deleteListOfStar(movieModel, basicController);
                                   basicController.savedMovies[listIndex][basicController.selectedDate.value].removeAt(index);
                                   if(basicController.savedMovies[listIndex][basicController.selectedDate.value].length == 0){
                                     basicController.savedMovies.removeAt(listIndex);
@@ -204,11 +206,23 @@ class CalendarScreen extends StatelessWidget {
               );
             },
             separatorBuilder: (BuildContext context, int index) {
-              return Divider(color: Theme.of(context).dividerColor, thickness: 1.1);
+              return Divider(color: Theme.of(context).dividerColor, thickness: 1);
             },
           )),
         ),
       ],
     );
+  }
+}
+
+void deleteListOfStar(MovieModel targetMovieModel, BasicController basicController) {
+  int index = starToIndex[targetMovieModel.rating]!;
+  int j = 0;
+  for (MovieModel movieModel in basicController.savedMoviesStar[index][targetMovieModel.rating]) {
+    if (movieModel == targetMovieModel) {
+      basicController.savedMoviesStar[index][targetMovieModel.rating].removeAt(j);
+      break;
+    }
+    j++;
   }
 }
