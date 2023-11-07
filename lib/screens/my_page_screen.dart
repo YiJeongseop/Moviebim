@@ -53,7 +53,7 @@ class MyPageScreen extends StatelessWidget {
           ),
           Divider(color: Theme.of(context).dividerColor, thickness: 1),
           const SizedBox(
-            height: 40,
+            height: 30,
           ),
           Column(
             children: [
@@ -175,7 +175,7 @@ class MyPageScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           Column(
             children: [
               buttonContainer(

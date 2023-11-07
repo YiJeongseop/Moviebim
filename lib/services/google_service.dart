@@ -14,7 +14,7 @@ import '../utilities/db_helper.dart';
 import '../utilities/snack_bar.dart';
 import '../widgets/loading_widget.dart';
 
-const String fileName = 'test5.json'; // moviebim.json for release
+const String fileName = 'test5.json'; // test5.json for release
 final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [drive.DriveApi.driveFileScope, drive.DriveApi.driveAppdataScope]
 );

@@ -40,7 +40,7 @@ class CalendarScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomPaint(
-          size: Size(deviceWidth, 20),
+          size: Size(deviceWidth, 16),
           painter: LinePainter(),
         ),
         const SizedBox(height: 3),
@@ -61,7 +61,7 @@ class CalendarScreen extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         CustomPaint(
-          size: Size(deviceWidth, 20),
+          size: Size(deviceWidth, 16),
           painter: LinePainter(),
         ),
         const SizedBox(height: 12),

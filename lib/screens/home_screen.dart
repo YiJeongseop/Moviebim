@@ -8,6 +8,7 @@ import '../controllers/login_controller.dart';
 import '../controllers/basic_controller.dart';
 import '../controllers/list_controller.dart';
 import 'calendar_screen.dart';
+import 'list_hor_screen.dart';
 import 'list_screen.dart';
 import 'my_page_screen.dart';
 import '../utilities/db_helper.dart';
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getRuntime();
     _widgetOptions.add(CalendarScreen(basicController: basicController));
     _widgetOptions.add(ListScreen(basicController: basicController));
+    _widgetOptions.add(ListHorScreen(basicController: basicController));
     _widgetOptions.add(MyPageScreen(basicController: basicController, loginController: loginController));
     _initializeAsyncStuff();
     super.initState();
@@ -79,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: isLoading || _selectedIndex == 2
+        appBar: isLoading || _selectedIndex == 3
             ? null
             : AppBar(
                 automaticallyImplyLeading: false,
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       splashRadius: (deviceWidth > 600) ? deviceWidth / 45 : deviceWidth / 18,
                     ),
-                  if(_selectedIndex == 1)
+                  if(_selectedIndex == 1 || _selectedIndex == 2)
                     Obx(() => IconButton(
                         onPressed: () {
                           listController.sortedByStar.value = !listController.sortedByStar.value;
@@ -125,8 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: AppLocalizations.of(context)!.viewByDate,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.list, size: deviceWidth / 15),
+                    icon: Icon(Icons.vertical_split_outlined, size: deviceWidth / 15),
                     label: AppLocalizations.of(context)!.viewAll,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.horizontal_split_outlined, size: deviceWidth / 15),
+                    label: AppLocalizations.of(context)!.viewAll2,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.people, size: deviceWidth / 15),

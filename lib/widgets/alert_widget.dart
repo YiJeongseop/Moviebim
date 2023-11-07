@@ -10,6 +10,7 @@ import '../services/admob_service.dart';
 import '../services/google_service.dart';
 import '../utilities/db_helper.dart';
 import '../widgets/loading_widget.dart';
+import '../widgets/star_widget.dart';
 import '../main.dart';
 
 AlertDialog loginAlertDialog(BuildContext context) {
@@ -175,5 +176,51 @@ AlertDialog okCancelDialog(BuildContext context, String text, BasicController ba
         ),
       ),
     ],
+  );
+}
+
+AlertDialog detailAlertDialog(BuildContext context, double rating, DateTime dateTime, String comment) {
+  return AlertDialog(
+    backgroundColor: Theme.of(context).colorScheme.background,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+    contentPadding: const EdgeInsets.all(8.0),
+    content: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.25,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  dateTime.toString().split(' ')[0],
+                  style: TextStyle(
+                    fontSize:  MediaQuery.of(context).size.width * 0.05,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                StarWidget(
+                  rating: rating,
+                  denominator: 3,
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
+            const SizedBox(height: 6),
+            Text(
+              comment,
+              style: TextStyle(
+                fontSize:  MediaQuery.of(context).size.width * 0.045,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }

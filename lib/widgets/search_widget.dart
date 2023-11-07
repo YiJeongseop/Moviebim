@@ -7,6 +7,7 @@ import '../controllers/movie_controller.dart';
 import '../controllers/text_controller.dart';
 import '../services/tmdb_service.dart';
 import '../utilities/snack_bar.dart';
+import 'loading_widget.dart';
 
 class SearchWidget extends StatelessWidget {
   SearchWidget({Key? key,
@@ -54,13 +55,16 @@ class SearchWidget extends StatelessWidget {
                   onChanged: (value) => textController.updateTitle(value),
                   textInputAction: TextInputAction.go,
                   onSubmitted: (value) async {
+                    addPageController.isLoading.value = true;
                     try {
                       final searchResult = await _tmdbService.searchMovies(value);
                       movieController.movies.value = searchResult['results'];
+                      addPageController.isLoading.value = false;
                       if(movieController.movies.isEmpty){
                         showSnackBar(context, AppLocalizations.of(context)!.noResult);
                       }
                     } catch (e) {
+                      addPageController.isLoading.value = false;
                       showSnackBar(context, AppLocalizations.of(context)!.errorMessage);
                     }
                   },
@@ -76,7 +80,9 @@ class SearchWidget extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Divider(color: Theme.of(context).dividerColor),
-        Expanded(
+        Obx(() => addPageController.isLoading.value
+            ? CircularProgressIndicator()
+            : Expanded(
           child: Obx(
             () => GridView.builder(
               shrinkWrap: true,
@@ -161,7 +167,7 @@ class SearchWidget extends StatelessWidget {
               },
             ),
           ),
-        ),
+        )),
       ],
     );
   }

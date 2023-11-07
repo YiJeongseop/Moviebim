@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 
 import '../models/movie_model.dart';
 
-const String dbName = 'test5.db'; // moviebim.db for release
+const String dbName = 'test5.db'; // test5.db for release
 const String tableMovie = 'tableMovie';
 const String columnTitle = 'title';
 const String columnPosterPath = 'posterPath';
