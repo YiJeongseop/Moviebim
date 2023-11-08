@@ -47,9 +47,7 @@ class MyPageScreen extends StatelessWidget {
         children: [
           SizedBox(
             height: 50,
-            child: AdWidget(
-              ad: banner,
-            ),
+            child: onDebug ? Container() : AdWidget(ad: banner),
           ),
           Divider(color: Theme.of(context).dividerColor, thickness: 1),
           const SizedBox(

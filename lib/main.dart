@@ -19,10 +19,10 @@ import 'api_key.dart';
 late final SharedPreferences prefs;
 final String defaultLocale = Platform.localeName;
 var consentStatus;
-bool englishTest = true; // false for release
-bool useRealAdId = false; // true for release
+bool englishTest = false; // false for release
+bool useRealAdId = true; // true for release
 bool consentTest = false; // EU consent 대상이 된다. false for release
-bool onDebug = true; // 광고가 안 나온다. false for release
+bool onDebug = false; // 광고가 안 나온다. false for release
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,

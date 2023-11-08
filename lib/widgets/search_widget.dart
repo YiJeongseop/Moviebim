@@ -106,7 +106,9 @@ class SearchWidget extends StatelessWidget {
                       if(!errorList.contains(index)){
                         try{
                           movieController.movieRuntime.value = 0;
+                          Get.dialog(const LoadingWidget(), barrierDismissible: false);
                           movieController.movieRuntime.value = await _tmdbService.fetchRuntime(movie['id']);
+                          Get.back();
                           if(movieController.movieRuntime.value == 0){
                             showSnackBar(context, AppLocalizations.of(context)!.errorMessage);
                             return;
