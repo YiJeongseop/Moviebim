@@ -21,6 +21,7 @@ class DetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -73,9 +74,7 @@ class DetailWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.onSurface,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.surface,
-                )
+                border: Border.all(color: Theme.of(context).colorScheme.surface),
             ),
             child: TextField(
               controller: textEditingController,
@@ -89,8 +88,8 @@ class DetailWidget extends StatelessWidget {
                 contentPadding: const EdgeInsets.only(top: 10, left: 10, right: 10),
               ),
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: deviceWidth * 0.045
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: deviceWidth * 0.045
               ),
               onChanged: (value) => textController.updateComment(value),
               textInputAction: TextInputAction.go,

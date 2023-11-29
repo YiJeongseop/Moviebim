@@ -10,6 +10,7 @@ class TMDbService {
   Future<Map<String, dynamic>> searchMovies(String query) async {
     final response = await http.get(Uri.parse(
         'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query&language=$language'));
+    // apiKey is in hidden api_key.dart.
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

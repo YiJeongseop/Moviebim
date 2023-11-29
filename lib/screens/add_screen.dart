@@ -98,7 +98,6 @@ class _AddScreenState extends State<AddScreen> {
                               if(basicController.savedMovies[i].containsKey(basicController.selectedDate.value)){
                                 basicController.savedMovies[i][basicController.selectedDate.value].add(movieModel);
 
-                                // 밑 코드는 Obx에게 savedMovies의 값이 변했음을 알려준다.
                                 basicController.savedMovies.add(
                                   {
                                     DateTime(2023, 9, 30): [movieModel]

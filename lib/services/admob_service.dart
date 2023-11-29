@@ -7,7 +7,7 @@ InterstitialAd? _interstitialAd;
 
 void loadInterstitialAd() {
   InterstitialAd.load(
-    adUnitId: useRealAdId ? realInterstitialAdId : testInterstitialAdId,
+    adUnitId: useRealAdId ? realInterstitialAdId : testInterstitialAdId, // realInterstitialAdId and testInterstitialAdId are in hidden api_key.dart
     request: consentStatus == ConsentStatus.required ? const AdRequest(nonPersonalizedAds: true) : const AdRequest(),
     adLoadCallback: InterstitialAdLoadCallback(
       onAdLoaded: (InterstitialAd ad) => _interstitialAd = ad,

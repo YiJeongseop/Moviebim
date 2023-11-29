@@ -21,8 +21,8 @@ final String defaultLocale = Platform.localeName;
 var consentStatus;
 bool englishTest = false; // false for release
 bool useRealAdId = true; // true for release
-bool consentTest = false; // EU consent 대상이 된다. false for release
-bool onDebug = false; // 광고가 안 나온다. false for release
+bool consentTest = false; // false for release
+bool onDebug = false; // false for release
 
 ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -34,16 +34,16 @@ ThemeData _lightTheme = ThemeData(
   cardColor: Colors.white,
   colorScheme: ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.black.withOpacity(0.9), // 텍스트
+    primary: Colors.black.withOpacity(0.9),
     onPrimary: Colors.transparent,
     secondary: Colors.transparent,
     onSecondary: Colors.transparent,
-    error: Colors.black12, // Icons.image_not_supported_outlined
-    onError: Colors.grey.withOpacity(0.9), // 검색창 돋보기, 전체(날짜 별로) 보기 텍스트 테두리,
-    background: Colors.grey[50]!, // 배경, 스낵바 텍스트 + X아이콘, alert dialog 배경, 달력 dayNameColor activeDayColor
-    onBackground: Colors.black.withOpacity(0.7), // 스낵바 배경, 앱바 아이콘, 바텀내비게이션바 unselectedItem, 달력 monthColor dayColor
-    surface: Colors.grey.withOpacity(0.5), // 검색창 테두리, 추가창(수정창) 포스터 테두리, 리뷰창 테두리
-    onSurface: Colors.white, // 검색창 배경, 리뷰창 배경, 전체(날짜 별로) 보기 텍스트 배경
+    error: Colors.black12,
+    onError: Colors.grey.withOpacity(0.9),
+    background: Colors.grey[50]!,
+    onBackground: Colors.black.withOpacity(0.7),
+    surface: Colors.grey.withOpacity(0.5),
+    onSurface: Colors.white,
   ),
   textTheme: englishTest
       ? GoogleFonts.robotoTextTheme()
@@ -60,16 +60,16 @@ ThemeData _darkTheme = ThemeData(
   cardColor: Colors.black.withOpacity(0.04),
   colorScheme: ColorScheme(
     brightness: Brightness.dark,
-    primary: Colors.white.withOpacity(0.9), // 텍스트
+    primary: Colors.white.withOpacity(0.9),
     onPrimary: Colors.transparent,
     secondary: Colors.transparent,
     onSecondary: Colors.transparent,
-    error: Colors.grey.withOpacity(0.5), // Icons.image_not_supported_outlined
-    onError: Colors.white.withOpacity(0.3), // 검색창 돋보기, 전체(날짜 별로) 보기 텍스트 테두리
-    background: Colors.grey[800]!, // 배경, 스낵바 텍스트 + X아이콘, alert dialog 배경, 달력 dayNameColor activeDayColor
-    onBackground: Colors.grey[300]!, // 스낵바 배경, 앱바 아이콘, 바텀내비게이션바 unselectedItem, 달력 monthColor dayColor
-    surface: Colors.black.withOpacity(0.5), // 검색창 테두리, 추가창(수정창) 포스터 테두리, 리뷰창 테두리
-    onSurface: Colors.black.withOpacity(0.24), // 검색창 배경, 리뷰창 배경, 전체(날짜 별로) 보기 텍스트 배경
+    error: Colors.grey.withOpacity(0.5),
+    onError: Colors.white.withOpacity(0.3),
+    background: Colors.grey[800]!,
+    onBackground: Colors.grey[300]!,
+    surface: Colors.black.withOpacity(0.5),
+    onSurface: Colors.black.withOpacity(0.24),
   ),
   textTheme: englishTest
       ? GoogleFonts.robotoTextTheme()
@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
     } else {
       ConsentDebugSettings debugSettings = ConsentDebugSettings(
           debugGeography: DebugGeography.debugGeographyEea,
-          testIdentifiers: [testId1, testId2]);
+          testIdentifiers: [testId1, testId2]); // testId1, 2 are in hidden api_key.dart
       params = ConsentRequestParameters(consentDebugSettings: debugSettings);
     }
 
@@ -123,7 +123,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 가로 회전 막기
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // Prevent horizontal rotation
     return GetMaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
