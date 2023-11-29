@@ -1,7 +1,7 @@
 # Moviebim
 It's available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.ovo.moviebim).
 
-I used the [TMDb API]([https://jikan.moe/](https://developer.themoviedb.org/docs)) to get movie's info.
+I used the [TMDb API](https://developer.themoviedb.org/docs) to get movie's info.
 
 
 ## Screenshots
