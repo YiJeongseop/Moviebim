@@ -1,6 +1,8 @@
 # Moviebim
 It's available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.ovo.moviebim).
 
+I used the [TMDb API]([https://jikan.moe/](https://developer.themoviedb.org/docs)) to get movie's info.
+
 
 ## Screenshots
 ![Screenshot1](https://github.com/YiJeongseop/Moviebim/assets/112690335/3f992b91-a733-46ab-b6a6-66bf5d992aca)
@@ -24,3 +26,7 @@ It's available on the [Google Play Store](https://play.google.com/store/apps/det
 * [equatable](https://pub.dev/packages/equatable)
 * [path](https://pub.dev/packages/path)
 * [flutter_svg](https://pub.dev/packages/flutter_svg)
+
+
+## License
+This project is licensed under the _MIT licence_ - see the [LICENSE](LICENSE) file for details.
