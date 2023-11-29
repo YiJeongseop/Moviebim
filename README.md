@@ -1,16 +1,26 @@
-# moviebim
+# Moviebim
+It's available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.ovo.moviebim).
 
-A new Flutter project.
 
-## Getting Started
+## Screenshots
+![Screenshot1](https://github.com/YiJeongseop/Moviebim/assets/112690335/3f992b91-a733-46ab-b6a6-66bf5d992aca)
+![Screenshot2](https://github.com/YiJeongseop/Moviebim/assets/112690335/9c170454-784d-491d-8905-28ebd86fb348)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Packages
+* [get](https://pub.dev/packages/get)
+* [google_sign_in](https://pub.dev/packages/google_sign_in)
+* [googleapis](https://pub.dev/packages/googleapis)
+* [google_mobile_ads](https://pub.dev/packages/google_mobile_ads)
+* [google_fonts](https://pub.dev/packages/google_fonts)
+* [firebase_auth](https://pub.dev/packages/firebase_auth)
+* [firebase_core](https://pub.dev/packages/firebase_core)
+* [sqflite](https://pub.dev/packages/sqflite)
+* [shared_preferences](https://pub.dev/packages/shared_preferences)
+* [calendar_timeline](https://pub.dev/packages/calendar_timeline)
+* [http](https://pub.dev/packages/http)
+* [intl](https://pub.dev/packages/intl)
+* [flutter_rating_bar](https://pub.dev/packages/flutter_rating_bar)
+* [equatable](https://pub.dev/packages/equatable)
+* [path](https://pub.dev/packages/path)
+* [flutter_svg](https://pub.dev/packages/flutter_svg)
